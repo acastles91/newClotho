@@ -1,2 +1,2 @@
-bin/newClotho
-bin/newClotho_debug
+./bin/newClotho
+./bin/newClotho_debug
