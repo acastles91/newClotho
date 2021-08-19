@@ -1,5 +1,0 @@
-ofxCv
-ofxGuiExtended
-ofxCvColorImageAlpha
-ofxFont
-ofxClipper
