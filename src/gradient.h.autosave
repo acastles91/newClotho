@@ -21,5 +21,16 @@ public:
              int &resolutionArg,
              int &distanceArg);
     
+    std::string gCodeString(ofParameter<int> &feedrateArg, ofParameter<int> &minEarg, ofParameter<int> &maxEarg);
+
+    std::string sprayOn;
+    std::string sprayOff;
+
+    int width;
+    int height;
+    int travelSpeed;
+
+    bool horizontal;
+    bool vertical;
     
 }
