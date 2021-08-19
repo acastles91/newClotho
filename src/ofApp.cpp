@@ -8,6 +8,19 @@ void ofApp::setup(){
     fbo.begin();
     fbo.clear();
     fbo.end();
+    xml.loadFile("settings.xml");
+
+    constVelocityX.set("Max Velocity X", xml.getValue("constants:maxVelocityX", 0));
+    constVelocityY.set("Max Velocity Y", xml.getValue("constants:maxVelocityY", 0));
+    constAcceleration.set("Max Acceleration", xml.getValue("constants:maxAcceleration", 0));
+    constMaxDistanceX.set("Size X", xml.getValue("constants:sizeX", 0));
+    constMaxDistanceY.set("Size Y", xml.getValue("constants:sizeY", 0));
+    constMaxDistanceZ.set("Size Z", xml.getValue("constants:sizeZ", 0));
+    constMinExtruderRange.set("Min Extruder range", xml.getValue("constants:minExtruderRange", 0));
+    constMaxExtruderRange.set("Max Extruder range", xml.getValue("constants:maxExtruderRange", 0));
+    constOptimalPrintVelocityX.set("Optimal print velocity X", xml.getValue("constants:optimalPrintVelocityX", 0));
+    constOptimalPrintVelocityY.set("Optimal print velocity Y", xml.getValue("constants:optimalPrintVelocityX", 0));
+
     layerHeight = ofGetHeight() - margin * 4;
     isLoaded = false;
     contourDraw = false;
@@ -18,16 +31,16 @@ void ofApp::setup(){
     buildContour = false;
     drawGcodeParameter = false;
     selectedBlob = 999999;
-    guiMode = Mode::mode_points;
     physicalElimit = 68;
     drawInfoParameter = false;
-    setupGui(canvasTest);
     drawBlurParameter = false;
     loadParameter = true;
     unclogParameter = true;
-
+    guiMode = Mode::mode_bitmap;
+    activeModeName = "Bitmap mode";
+    setupGui(canvasTest);
+    modeGui();
     gCodeExport << "";
-
     gCodeHeader = "G90\n G0 E0\n";
     sprayOn = "M106 \n";
     sprayOff = "M107 \n";
@@ -37,8 +50,6 @@ void ofApp::setup(){
     zValues.push_back(z2);
     zValues.push_back(z3);
     zValues.push_back(z4);
-
-
 
 }
 
@@ -57,38 +68,70 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    ofRectangle workingArea;
-    ofParameter<int> workingXdynamic;
-    ofParameter<int> workingYdynamic;
-    ofParameter<int> workingWidthDynamic;
-    ofParameter<int> workingHeightDynamic;
-
-    workingXdynamic = ofMap(workingX, 0, 2000, canvasTest.rect.getX(), canvasTest.rect.getX() + canvasTest.rect.getWidth());
-    workingYdynamic = ofMap(workingY, 0, 2000, canvasTest.rect.getY(), canvasTest.rect.getY() + canvasTest.rect.getHeight());
-    workingWidthDynamic = ofMap(workingWidth, 0, 2000, 0, canvasTest.rect.getWidth());
-    workingHeightDynamic = ofMap(workingHeight, 0, 2000, 0, canvasTest.rect.getHeight());
-
-
-//    workingArea.set(ofMap(workingX, 0, 2000, canvasTest.rect.getX(), canvasTest.rect.getX() + canvasTest.rect.getWidth()),
-//                    ofMap(workingY, 0, 2000, canvasTest.rect.getY(), canvasTest.rect.getY() + canvasTest.rect.getHeight()),
-//                    ofMap(workingWidth, 0, 2000, 0, canvasTest.rect.getWidth()),
-//                    ofMap(workingHeight, 0, 2000, 0, canvasTest.rect.getHeight()));
-
-    if (workingHeightDynamic > 2000 - workingYdynamic - 2 * margin){
-        workingHeightDynamic = 2000 - workingYdynamic - 2 * margin;
-    }
-
-    if (workingWidthDynamic > 2000 - workingXdynamic - 2 * margin){
-        workingWidthDynamic = 2000 - workingXdynamic - 2 * margin;
-    }
-    workingArea.set(workingXdynamic, workingYdynamic, workingWidthDynamic, workingHeightDynamic);
     ofFill();
     ofSetColor(ofColor::white);
     ofDrawRectangle(canvasTest.rect);
 
-    //ofTranslate(canvasTest.rect.getX(), canvasTest.rect.getY());
 
-    //ofTranslate(0,0);
+    if (guiMode == Mode::mode_bitmap){
+
+        ofRectangle workingArea;
+        ofParameter<int> workingXdynamic;
+        ofParameter<int> workingYdynamic;
+        ofParameter<int> workingWidthDynamic;
+        ofParameter<int> workingHeightDynamic;
+
+        workingXdynamic = ofMap(workingX, 0, 2000, canvasTest.rect.getX(), canvasTest.rect.getX() + canvasTest.rect.getWidth());
+        workingYdynamic = ofMap(workingY, 0, 2000, canvasTest.rect.getY(), canvasTest.rect.getY() + canvasTest.rect.getHeight());
+        workingWidthDynamic = ofMap(workingWidth, 0, 2000, 0, canvasTest.rect.getWidth());
+        workingHeightDynamic = ofMap(workingHeight, 0, 2000, 0, canvasTest.rect.getHeight());
+
+        if (workingHeightDynamic > 2000 - workingYdynamic - 2 * margin){
+            workingHeightDynamic = 2000 - workingYdynamic - 2 * margin;
+        }
+
+        if (workingWidthDynamic > 2000 - workingXdynamic - 2 * margin){
+            workingWidthDynamic = 2000 - workingXdynamic - 2 * margin;
+        }
+        workingArea.set(workingXdynamic, workingYdynamic, workingWidthDynamic, workingHeightDynamic);
+
+        drawExperimentBuffer(canvasTest);
+        ofNoFill();
+        ofSetColor(ofColor::blue);
+        ofDrawRectangle(workingArea);
+
+    }
+
+    if (guiMode == Mode::mode_gradient){
+
+        ofRectangle gradientArea;
+        ofParameter<int> gradientXdynamic;
+        ofParameter<int> gradientYdynamic;
+        ofParameter<int> gradientWidthDynamic;
+        ofParameter<int> gradientHeightDynamic;
+
+        gradientXdynamic = ofMap(gradientX, 0, 2000, canvasTest.rect.getX(), canvasTest.rect.getX() + canvasTest.rect.getWidth());
+        gradientYdynamic = ofMap(gradientY, 0, 2000, canvasTest.rect.getY(), canvasTest.rect.getY() + canvasTest.rect.getHeight());
+        gradientWidthDynamic = ofMap(gradientWidth, 0, 2000, 0, canvasTest.rect.getWidth());
+        gradientHeightDynamic = ofMap(gradientHeight, 0, 2000, 0, canvasTest.rect.getHeight());
+
+        if (gradientHeightDynamic > 2000 - gradientYdynamic - 2 * margin){
+            gradientHeightDynamic = 2000 - gradientYdynamic - 2 * margin;
+            gradientHeightLimit = gradientHeightDynamic;
+        }
+
+        if (gradientWidthDynamic > 2000 - gradientXdynamic - 2 * margin){
+            gradientWidthDynamic = 2000 - gradientXdynamic - 2 * margin;
+            gradientWidthLimit = gradientWidthDynamic;
+        }
+        gradientArea.set(gradientXdynamic, gradientYdynamic, gradientWidthDynamic, gradientHeightDynamic);
+
+        drawExperimentBuffer(canvasTest);
+        ofNoFill();
+        ofSetColor(ofColor::red);
+        ofDrawRectangle(gradientArea);
+    }
+
 
     if (drawInfoParameter){
         drawInfo();
@@ -104,35 +147,35 @@ void ofApp::draw(){
             }
 
             //if (layers.back()->hatchBool){
-            if (drawHatchParameter){
-                layers.back()->drawHatch(canvasTest.xCanvas, canvasTest.yCanvas);
-            }
+//            if (drawHatchParameter){
+//                layers.back()->drawHatch(canvasTest.xCanvas, canvasTest.yCanvas);
+//            }
 
-            if (drawContourParameter){
-            //if (layers.back()->contourBool){
-                layers.back()->drawContour(canvasTest.xCanvas, canvasTest.yCanvas);
-            }
+//            if (drawContourParameter){
+//            //if (layers.back()->contourBool){
+//                layers.back()->drawContour(canvasTest.xCanvas, canvasTest.yCanvas);
+//            }
 
-            if (drawTravelParameter){
-            //if (layers.back()->travelBool){
-                layers.back()->drawTravel(canvasTest.xCanvas, canvasTest.yCanvas);
-            }
+//            if (drawTravelParameter){
+//            //if (layers.back()->travelBool){
+//                layers.back()->drawTravel(canvasTest.xCanvas, canvasTest.yCanvas);
+//            }
 
             if (drawGcodeParameter){
                 layers.back()->drawGcode(canvasTest.xCanvas, canvasTest.yCanvas);
             }
 
-            if (drawBlurParameter){
-                layers.back()->drawBlur(canvasTest.xCanvas, canvasTest.yCanvas);
-            }
+//            if (drawBlurParameter){
+//                layers.back()->drawBlur(canvasTest.xCanvas, canvasTest.yCanvas);
+//            }
 
             if (drawBufferParameter){
                 layers.back()->drawBuffer(canvasTest);
             }
 
-            if (layers.back()->blobSelected == true){
-                layers.back()->drawSelectedBlob(canvasTest.xCanvas, canvasTest.yCanvas);
-            }
+//            if (layers.back()->blobSelected == true){
+//                layers.back()->drawSelectedBlob(canvasTest.xCanvas, canvasTest.yCanvas);
+//            }
 
             if (drawGcodePointsParameter){
                 layers.back()->drawGcodePoints(canvasTest.xCanvas, canvasTest.yCanvas);
@@ -144,10 +187,7 @@ void ofApp::draw(){
 //        drawExperimentBuffer(canvasTest);
 
 //        }
-    drawExperimentBuffer(canvasTest);
-    ofNoFill();
-    ofSetColor(ofColor::blue);
-    ofDrawRectangle(workingArea);
+
 
 //
     }
@@ -604,10 +644,10 @@ void ofApp::setMode(int &index){
 
     switch(index){
         case 0:
-            guiMode = Mode::mode_points;
+            guiMode = Mode::mode_bitmap;
             break;
         case 1:
-            guiMode = Mode::mode_lines;
+            guiMode = Mode::mode_gradient;
             break;
         case 2:
             guiMode = Mode::mode_experimental;
@@ -703,5 +743,26 @@ void ofApp::updateSliders(){
 
     workingAreaContainer->add<ofxGuiIntInputField>(workingWidth.set("Width", workingWidth.get(), 0, 2000 - workingX));
     workingAreaContainer->add<ofxGuiIntInputField>(workingHeight.set("Height", workingHeight.get(), 0, 2000 - workingY));
+
+}
+
+void ofApp::saveSettings(){
+
+//    xml.setValue("settings:finalZ")
+//    xml.setValue("settings:minRangeE")
+//    xml.setValue("settings:maxRangeE")
+//    xml.setValue("settings:feedrate")
+//    xml.setValue("settings:workingX")
+//    xml.setValue("settings:workingY")
+//    xml.setValue("settings:workingWidth")
+//    xml.setValue("settings:workingHeight")
+//    xml.setValue("settings:radiusMultiplier")
+//    xml.setValue("settings:")
+//    xml.setValue("settings:")
+//    xml.setValue("settings:")
+//    xml.setValue("settings:")
+//    xml.setValue("settings:")
+
+
 
 }

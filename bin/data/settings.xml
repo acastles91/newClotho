@@ -1,4 +1,54 @@
 <?xml version="1.0"?>
+<constants>
+	<maxVelocityX>20000</maxVelocityX>
+	<maxVelocityY>15500</maxVelocityY>
+	<maxAccelerationX>500</maxAccelerationX>
+	<maxAccelerationY>3000</maxAccelerationY>
+	<sizeX>2150</sizeX>
+	<sizeY>2000</sizeY>
+	<sizeZ>300</sizeZ>
+	<minExtruderRange>0</minExtruderRange>
+	<maxExtruderRange>63</maxExtruderRange>
+	<optimalPrintVelocityX>9285</optimalPrintVelocityX>
+	<optimalPrintVelocityY>10250</optimalPrintVelocityY>
+</constants>
 <group>
-	<G-Code />
+	<Constants />
+	<group>
+		<group>
+			<Modes>
+				<Mode_time>0</Mode_time>
+				<Mode_extruder>1</Mode_extruder>
+			</Modes>
+			<group>
+				<Draw_Layer>1</Draw_Layer>
+				<Draw_buffer>0</Draw_buffer>
+				<Draw_Gcode_Points>0</Draw_Gcode_Points>
+				<Print_Horizontal>1</Print_Horizontal>
+				<Print_vertical>0</Print_vertical>
+			</group>
+			<Load_while_printing>0</Load_while_printing>
+			<Load_lines>20</Load_lines>
+			<Load_time__seconds_>30</Load_time__seconds_>
+			<Unclog_while_printing>0</Unclog_while_printing>
+			<Unclog_Interval__lines_>10</Unclog_Interval__lines_>
+		</group>
+		<horizontal_sliders>
+			<Radius>1</Radius>
+			<Z_value>36</Z_value>
+			<Min__E_value>6</Min__E_value>
+			<Max__E_value>24</Max__E_value>
+			<Feedrate>2613</Feedrate>
+			<Radius_Multiplier>71</Radius_Multiplier>
+			<Min_Velocity>733</Min_Velocity>
+			<Max_Velocity>7341</Max_Velocity>
+			<Time_resolution>35</Time_resolution>
+		</horizontal_sliders>
+		<Working_Area>
+			<X>299</X>
+			<Y>727</Y>
+			<Width>821</Width>
+			<Height>1101</Height>
+		</Working_Area>
+	</group>
 </group>

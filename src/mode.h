@@ -1,8 +1,8 @@
 #pragma once
 
 enum class Mode {
-    mode_lines,
-    mode_points,
+    mode_bitmap,
+    mode_gradient,
     mode_experimental
 }
 ;

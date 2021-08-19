@@ -3,13 +3,13 @@
 #include <string>       // std::string
 #include <iostream>     // std::cout
 #include <sstream>      // std::stringstream, std::stringbuf
-
+#include "ofxXmlSettings.h"
 #include "layer.h"
 #include "ofMain.h"
 #include "canvas.h"
 #include "ofxGuiExtended.h"
 #include "mode.h"
-
+#include "ofxXmlSettings.h"
 
 class ofApp : public ofBaseApp{
 
@@ -45,9 +45,24 @@ class ofApp : public ofBaseApp{
         bool setupDone;
 
         ofFileDialogResult  saveFilePath;
+        ofxXmlSettings xml;
+
+        //Constants
+
+        ofParameter<int>    constVelocityX,
+                            constVelocityY,
+                            constAcceleration,
+                            constMaxDistanceX,
+                            constMaxDistanceY,
+                            constMaxDistanceZ,
+                            constMinExtruderRange,
+                            constMaxExtruderRange,
+                            constOptimalPrintVelocityX,
+                            constOptimalPrintVelocityY;
 
 
         //GUI
+
 
         ofxGuiPanel          *projectPanel,
                              *gCodePanel,
@@ -56,8 +71,10 @@ class ofApp : public ofBaseApp{
                              *controlPanel,
                              *experimentalPanel,
                              *linesPanel,
-                             *pointsPanel,
+                             *bitmapPanel,
+                             *gradientPanel,
                              //*stabPanel;
+                             *constantsPanel,
                              *startStopP,
                              *directionP,
                              *homingP,
@@ -72,6 +89,8 @@ class ofApp : public ofBaseApp{
                              *directionContainer,
                              *buttonsContainer,
                              *slidersContainer,
+                             *gradientContainer,
+                             *secondSlidersContainer,
                              *markersContainer,
                              *backgroundSubContainer,
                              *modeContainer,
@@ -85,7 +104,9 @@ class ofApp : public ofBaseApp{
                             *backgroundGroup,
                             *backgroundSubGroup,
                             *gCodeGroup,
+                            *gradientGroup,
                             *notificationGroup,
+                            *constantsGroup,
                             *experimentToggles,
                             *modeToggles,
                             *directionGroup,
@@ -133,6 +154,7 @@ class ofApp : public ofBaseApp{
                              *generateGcodeLinesButton,
                              *drawGcodePointsButton,
                              *buildHatchButton,
+                             *saveSettingsButton,
                              *generateExperimentButton;
 
 
@@ -222,7 +244,20 @@ class ofApp : public ofBaseApp{
                                 radiusMultiplier,
                                 loadLines,
                                 loadTime,
-                                unclogLines;
+                                unclogLines,
+
+                                //GradientMode
+                                minVelocity,
+                                maxVelocity,
+                                resolution,
+                                distanceLines,
+                                gradientX,
+                                gradientY,
+                                gradientHeight,
+                                gradientHeightLimit,
+                                gradientWidth,
+                                gradientWidthLimit
+                                ;
 
          std::vector<ofParameter<int>>  zValues;
          std::vector<PointGcode*> experimentPoints;
@@ -280,6 +315,7 @@ class ofApp : public ofBaseApp{
         void loadBackground();
         void drawInfo();
         void saveFile();
+        void saveSettings();
 
         //Callers
 

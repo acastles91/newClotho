@@ -915,6 +915,7 @@ void Layer::generateGcodePoints(ofParameter<int> workingXarg,
         diffHeight = int(workingHeightArg - workingYarg) % radius;
         int numberLines;
         //Horizontal
+        if (mode == Mode::mode_bitmap){
         if (horizontal){
             numberLines = (workingHeightArg - workingYarg - diffHeight / 2) / radius * 2;
             for (int y = radius + diffHeight / 2; y < workingHeightArg + workingYarg- diffHeight / 2; y += radius * 2){
@@ -939,7 +940,7 @@ void Layer::generateGcodePoints(ofParameter<int> workingXarg,
                    }
              }
          }
-
+        //vertical
         else if(vertical){
             numberLines = (workingWidthArg - workingXarg - diffWidth / 2) / radius * 2;
             for (int x = radius + diffWidth / 2; x < workingWidthArg + workingXarg- diffWidth / 2; x += radius * 2){
@@ -959,11 +960,12 @@ void Layer::generateGcodePoints(ofParameter<int> workingXarg,
                             //ofLog() << newPoint->z;
                             }
                         }
-                    LineGcode* newLine = new LineGcode(vectorY, maxX, maxY, vertical);
+                    LineGcode* newLine = new LineGcode(vectorY, maxX, maxY, horizontal);
                     linesTest.push_back(newLine);
                    }
              }
          }
+        }
         }
     }
 

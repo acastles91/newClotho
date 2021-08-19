@@ -13,7 +13,7 @@ LineGcode::LineGcode(std::vector<PointGcode*> &vectorPointsArg,
     height = heightArg;
     travelSpeed = 4000;
     horizontal = horizontalArg;
-    vertical = !horizontalArg;
+    ofLog() << horizontalArg;
 
 }
 
@@ -77,41 +77,53 @@ std::string LineGcode::gCodeString(ofParameter<int> &feedrateArg, ofParameter<in
     }
 
 
-        else if (vertical){
+        else if (!horizontal){
 
             boost::format   pointZero = boost::format("G0 X%d Y%d Z%d E%d F%d\n")
-                                          % ofToString(width - vectorPoints[0]->x)
-                                          % ofToString(vectorPoints[0]->y + 100)
+                                          //fixing offset % ofToString(width - vectorPoints[0]->x)
+                                          //% ofToString(vectorPoints[0]->x)
+                                          % ofToString(vectorPoints[0]->x)
+                                          % ofToString((height - vectorPoints[0]->y) + 100)
                                           % ofToString(vectorPoints[0]->z)
                                           % ofToString(0)
                                           % ofToString(travelSpeed);
 
             boost::format   firstPoint = boost::format("G1 X%d Y%d Z%d E%d F%d\n")
-                                          % ofToString(width - vectorPoints[0]->x)
-                                          % ofToString(vectorPoints[0]->y)
+                                          //fixing offset % ofToString(width - vectorPoints[0]->x)
+                                          % ofToString(vectorPoints[0]->x)
+                                          % ofToString(height - vectorPoints[0]->y)
                                           % ofToString(vectorPoints[0]->z)
                                           % ofToString(ofMap(vectorPoints[0]->color.getBrightness(), 0, 255, maxE, minE, true), 2)
                                           //% ofToString(std::setprecision(2) << eValue)
                                           % ofToString(travelSpeed * 2);
 
             boost::format   lastPoint = boost::format("G0 X%d Y%d Z%d E%d F%d\n")
-                                          % ofToString(width - vectorPoints.back()->x)
-                                          % ofToString(vectorPoints[0]->y - 100)
+                                          //fixing offset % ofToString(width - vectorPoints[0]->x)
+                                          //fixing offset % ofToString(vectorPoints.back()->x)
+                                          % ofToString(vectorPoints[0]->x)
+                                          //fixing offset % ofToString(vectorPoints[0]->y - 100)
+                                          % ofToString((height - vectorPoints.back()->y) - 100)
                                           % ofToString(vectorPoints.back()->z)
                                           % ofToString(0)
                                           % ofToString(travelSpeed);
 
         vector<boost::format> gCodePoints;
 
+        boost::format   flag = boost::format("Point zero");
+
         lineString = pointZero.str();
+        //fixing offset
+        //lineString += flag.str();
+        lineString += firstPoint.str();
 
         for (int i = 0; i < this->vectorPoints.size() - 1; i++){
 
 
             //eValue = std::setprecision(2) << ofMap(vectorPoints[i]->color.getBrightness(), 0, 255, maxE, minE, true);
             boost::format   gCodePoint = boost::format("G1 X%d Y%d Z%d E%d F%d\n")
-                                          % ofToString(width - vectorPoints[i + 1]->x)
-                                          % ofToString(vectorPoints[i + 1]->y)
+                                          //fixing offset % ofToString(width - vectorPoints[i + 1]->x)
+                                          % ofToString(vectorPoints[i + 1]->x)
+                                          % ofToString(height - vectorPoints[i + 1]->y)
                                           % ofToString(vectorPoints[i + 1]->z)
                                           % ofToString(ofMap(vectorPoints[i]->color.getBrightness(), 0, 255, maxE, minE, true), 2)
                                           //% ofToString(std::setprecision(2) << eValue)
