@@ -3,3 +3,4 @@ ofxGuiExtended
 ofxCvColorImageAlpha
 ofxFont
 ofxClipper
+ofxXmlSettings

@@ -5,27 +5,34 @@
 #include <boost/format.hpp>
 #include "pointgcode.h"
 
+
 class Gradient{
 
 public:
 
-    Gradient(int &xGradientArg,
-             int &yGradientArg,
-             int &widthGradientArg,
-             int &heightGradientArg,
-             int &initialZarg,
-             int &finalZarg,
-             int &initialEarg,
-             int &finalEarg,
-             int &dSpeedArg,
-             int &resolutionArg,
-             int &distanceArg);
+    Gradient(ofParameter<int> &xGradientArg,
+             ofParameter<int> &yGradientArg,
+             ofParameter<int> &widthGradientArg,
+             ofParameter<int> &heightGradientArg,
+             ofParameter<int> &initialZarg,
+             ofParameter<int> &finalZarg,
+             ofParameter<int> &initialEarg,
+             ofParameter<int> &finalEarg,
+             ofParameter<int> &initialFarg,
+             ofParameter<int> &finalFarg,
+             ofParameter<int> &resolutionArg,
+             ofParameter<int> &distanceArg,
+             ofParameter<int> &slopeArg,
+             ofParameter<int> &travelSpeedArg,
+             ofParameter<bool> &horizontalArg);
 
     std::string gCodeString(ofParameter<int> &feedrateArg, ofParameter<int> &minEarg, ofParameter<int> &maxEarg);
 
     std::string sprayOn;
     std::string sprayOff;
-
+    std::string gradientString;
+    std::string prueba;
+    std::vector<boost::format> gCodePoints;
     int width;
     int height;
     int travelSpeed;
@@ -33,4 +40,11 @@ public:
     bool horizontal;
     bool vertical;
 
+    int numberPoints,
+        numberLines,
+        dZ,
+        dE,
+        dF;
+
 }
+;

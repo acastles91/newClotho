@@ -77,6 +77,7 @@ void ofApp::setupGui(Canvas &canvasArg){
     constantsGroup->add<ofxGuiIntLabel>(constOptimalPrintVelocityX);
     constantsGroup->add<ofxGuiIntLabel>(constOptimalPrintVelocityY);
     constantsGroup->add<ofxGuiLabel>(activeModeName);
+    constantsGroup->add<ofxGuiLabel>(notificationLabel);
 
     gradientGroup = gradientPanel->addGroup("Gradient");
 
@@ -103,12 +104,12 @@ void ofApp::setupGui(Canvas &canvasArg){
     projectGroup->setConfig(ofJson({{"type", "fullsize"}, {"direction", "vertical"}}));
     modeContainer = projectGroup->addContainer();
     modeParameters.setName("Modes");
-    modeParameters.add(mode1Parameter.set("Mode time", false));
-    modeParameters.add(mode2Parameter.set("Mode extruder", true));
+    modeParameters.add(mode1Parameter.set("Mode bitmap", false));
+    modeParameters.add(mode2Parameter.set("Mode gradient", true));
     modeToggles = modeContainer->addGroup(modeParameters);
     modeToggles->setExclusiveToggles(true);
     modeToggles->setConfig(ofJson({{"type", "radio"}}));
-    modeToggles->setActiveToggle(2);
+    modeToggles->setActiveToggle(1);
     modeToggles->getActiveToggleIndex().addListener(this, &ofApp::setMode);
 
     layerContainer = bitmapPanel->addContainer();
@@ -237,12 +238,12 @@ void ofApp::setupGui(Canvas &canvasArg){
     drawSubGroup->setConfig(ofJson({{"type", "checkbox"}, {"direction", "vertical"}}));
     drawSubGroup->setExclusiveToggles(0);
 
-    directionContainer = bitmapPanel->addContainer();
+    directionContainer = controlPanel->addContainer();
     directionContainer->setBackgroundColor(ofColor::aqua);
     directionContainer->setWidth(layerContainer->getWidth());
     directionContainer->setPosition(0, backgroundContainer->getHeight());
     directionParameters.add(horizontalPrintParameter.set("Print Horizontal", true));
-    directionParameters.add(verticalPrintParameter.set("Print vertical", !horizontalPrintParameter));
+    directionParameters.add(verticalPrintParameter.set("Print vertical", false));
 
     directionGroup = controlPanel->addGroup(directionParameters);
     directionGroup->setBackgroundColor(ofColor::aqua);
@@ -266,9 +267,22 @@ void ofApp::setupGui(Canvas &canvasArg){
     secondSlidersContainer->setBackgroundColor(ofColor::khaki);
     secondSlidersContainer->setPosition(0, directionContainer->getHeight());
     secondSlidersContainer->add(gradientX.set("X", 600, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
-    secondSlidersContainer->add(gradientY.set("Y", 800, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
+    secondSlidersContainer->add(gradientY.set("Y", 600, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
     secondSlidersContainer->add(gradientWidth.set("Width", 500, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
-    secondSlidersContainer->add(gradientHeight.set("Height", 300, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
+    secondSlidersContainer->add(gradientHeight.set("Height", 1200, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
+    secondSlidersContainer->add(gradientZinitial.set("Initial Z position", 600, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
+    secondSlidersContainer->add(gradientZfinal.set("Final Z position", 600, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
+    secondSlidersContainer->add(gradientEinitial.set("Initial E position", 600, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
+    secondSlidersContainer->add(gradientEfinal.set("Final E position", 600, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
+    secondSlidersContainer->add(gradientFinitial.set("Initial speed", 1000, 0, 9000), ofJson({{"width", 100}, {"height", 30}}));
+    secondSlidersContainer->add(gradientFfinal.set("Final speed", 8000, 0, 9000), ofJson({{"width", 100}, {"height", 30}}));
+    secondSlidersContainer->add(gradientResolution.set("Resolution", 100, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
+    secondSlidersContainer->add(gradientDistance.set("Distance between lines", 5, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
+    secondSlidersContainer->add(gradientSlope.set("Slope", 50, 0, 300), ofJson({{"width", 100}, {"height", 30}}));
+    secondSlidersContainer->add(drawGradientFrameParameter.set("Draw gradient frame", true));
+    secondSlidersContainer->add(drawGradientParameter.set("Draw frame", true));
+    secondSlidersContainer->add(travelSpeedParameter.set("Travel Speed", 5000, 0, 6000), ofJson({{"width", 100}, {"height", 30}}));
+
 
     secondSlidersContainer->add(minVelocity.set("Min Velocity", 700, 100, 1000), ofJson({{"width", 120}, {"height", 50}}));
     secondSlidersContainer->add(maxVelocity.set("Max Velocity", 9285, 1000, 9285), ofJson({{"width", 100}, {"height", 30}}));
@@ -277,6 +291,8 @@ void ofApp::setupGui(Canvas &canvasArg){
     secondSlidersContainer->add(feedrate.set("Feedrate", 8000, 11000, 1), ofJson({{"width", 100}, {"height", 30}}));
     secondSlidersContainer->add(radiusMultiplier.set("Radius Multiplier", 1, 150, 1), ofJson({{"width", 120}, {"height", 50}}));
 
+    generateGradientButton = secondSlidersContainer->add<ofxGuiButton>("Generate gradient", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
+    generateGradientButton->addListener(this, &ofApp::generateGradientCaller);
 
     //radiusListener = radius.newListener([&](float&){return this->updateLayer();});
     //radiusListener = radius.addListener(this, &ofApp::updateLayer);
@@ -371,8 +387,10 @@ void ofApp::modeGui(){
         linesPanel->setHidden(false);
         //linesPanel->setEnabled(true);
         bitmapPanel->setHidden(false);
+        bitmapPanel->setEnabled(false);
         //pointsPanel->setEnabled(false);
         experimentalPanel->setHidden(true);
+        gradientPanel->setEnabled(true);
         //experimentalPanel->setEnabled(false);
         controlPanel->setHidden(false);
 
@@ -382,10 +400,12 @@ void ofApp::modeGui(){
      case Mode::mode_bitmap:
 
         bitmapPanel->setHidden(false);
+        bitmapPanel->setEnabled(true);
         //pointsPanel->setEnabled(true);
 
         experimentalPanel->setHidden(true);
         //experimentalPanel->setEnabled(false);
+        gradientPanel->setEnabled(false);
 
         linesPanel->setHidden(false);
         //linesPanel->setEnabled(false);

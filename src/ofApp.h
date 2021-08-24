@@ -10,6 +10,7 @@
 #include "ofxGuiExtended.h"
 #include "mode.h"
 #include "ofxXmlSettings.h"
+#include "gradient.h"
 
 class ofApp : public ofBaseApp{
 
@@ -113,8 +114,7 @@ class ofApp : public ofBaseApp{
                             *experimentGroup;
 
          std::string        gCodeIndividualLabel,
-                            gCodeTotalLabel,
-                            notificationLabel;
+                            gCodeTotalLabel;
 
          ofParameter<string>    intentemos;
 
@@ -155,7 +155,8 @@ class ofApp : public ofBaseApp{
                              *drawGcodePointsButton,
                              *buildHatchButton,
                              *saveSettingsButton,
-                             *generateExperimentButton;
+                             *generateExperimentButton,
+                             *generateGradientButton;
 
 
          ofxGuiToggle           *backwardB,     //check
@@ -173,7 +174,8 @@ class ofApp : public ofBaseApp{
                                 textfieldVal, //check
                                 activeModeName,
                                 activeExperimentName,
-                                experimentDescriptionString;
+                                experimentDescriptionString,
+                                notificationLabel;
 
 
          ofParameter<bool>       drawContourParameter,
@@ -185,6 +187,8 @@ class ofApp : public ofBaseApp{
                                  drawBlurParameter,
                                  drawBufferParameter,
                                  drawGcodePointsParameter,
+                                 drawGradientParameter,
+                                 drawGradientFrameParameter,
                                  mode1Parameter,
                                  mode2Parameter,
                                  mode3Parameter,
@@ -203,6 +207,8 @@ class ofApp : public ofBaseApp{
                                  unclogParameter,
                                  horizontalPrintParameter,
                                  verticalPrintParameter,
+                                 gradientIsGenerated,
+
     //    //check all these
     //    //_______________________________________________
 
@@ -246,6 +252,7 @@ class ofApp : public ofBaseApp{
                                 loadTime,
                                 unclogLines,
 
+
                                 //GradientMode
                                 minVelocity,
                                 maxVelocity,
@@ -256,11 +263,21 @@ class ofApp : public ofBaseApp{
                                 gradientHeight,
                                 gradientHeightLimit,
                                 gradientWidth,
-                                gradientWidthLimit
-                                ;
+                                gradientWidthLimit,
+                                gradientZinitial,
+                                gradientZfinal,
+                                gradientEinitial,
+                                gradientEfinal,
+                                gradientFinitial,
+                                gradientFfinal,
+                                gradientResolution,
+                                gradientDistance,
+                                gradientSlope,
+                                travelSpeedParameter;
 
          std::vector<ofParameter<int>>  zValues;
          std::vector<PointGcode*> experimentPoints;
+         std::vector<Gradient*>	gradientVector;
 
          ofEventListener        radiusListener,
                                 thresholdListener,
@@ -327,7 +344,7 @@ class ofApp : public ofBaseApp{
         void generateGcodePointsCaller();
         void generateGcodeLines();
         void experiment1Caller();
-
+        void generateGradientCaller();
         // seters
 
         void setRadius();

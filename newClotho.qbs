@@ -21,13 +21,14 @@ Project{
         // the list of used addons in array format. eg:
         //
         of.addons: [
-                        'ofxCv',
-                        'ofxGuiExtended',
-                        'ofxCvColorImageAlpha',
-                        'ofxFont',
-                        'ofxClipper',
-                        'ofxXmlSettings'
-        ]
+                                'ofxCv',
+                                'ofxGuiExtended',
+                                'ofxCvColorImageAlpha',
+                                'ofxFont',
+                                'ofxClipper',
+                                'ofxXmlSettings'
+
+            ]
 
         // additional flags for the project. the of module sets some
         // flags by default to add the core libraries, search paths...

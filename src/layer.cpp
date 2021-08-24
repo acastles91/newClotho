@@ -1047,3 +1047,47 @@ void Layer::drawGcodePoints(int &xArg, int &yArg){
     ofPopMatrix();
 
 }
+
+void Layer::generateGradient(ofParameter<int> &xArg,
+                         ofParameter<int> &yArg,
+                         ofParameter<int> &widthArg,
+                         ofParameter<int> &heightArg,
+                         ofParameter<int> &initialZarg,
+                         ofParameter<int> &finalZarg,
+                         ofParameter<int> &initialEarg,
+                         ofParameter<int> &finalEarg,
+                         ofParameter<int> &initialFarg,
+                         ofParameter<int> &finalFarg,
+                         ofParameter<int> &resolutionArg,
+                         ofParameter<int> &distanceArg,
+                         ofParameter<int> &slopeArg,
+                         ofParameter<int> &travelSpeedArg,
+                         ofParameter<bool> &horizontalArg){
+
+
+
+
+    Gradient*	newGradient = new Gradient(xArg,
+                                           yArg,
+                                           widthArg,
+                                           heightArg,
+                                           initialZarg,
+                                           finalZarg,
+                                           initialEarg,
+                                           finalEarg,
+                                           initialFarg,
+                                           finalFarg,
+                                           resolutionArg,
+                                           distanceArg,
+                                           slopeArg,
+                                           travelSpeedArg,
+                                           horizontalArg);
+
+    gradientVector.push_back(newGradient);
+
+    ofLog() << "horizontalArg =";
+    ofLog() <<  horizontalArg;
+
+
+
+}

@@ -37,7 +37,6 @@ void ofApp::setup(){
     loadParameter = true;
     unclogParameter = true;
     guiMode = Mode::mode_bitmap;
-    activeModeName = "Bitmap mode";
     setupGui(canvasTest);
     modeGui();
     gCodeExport << "";
@@ -45,6 +44,7 @@ void ofApp::setup(){
     sprayOn = "M106 \n";
     sprayOff = "M107 \n";
     gCodeFooter = "G0 E0";
+    notificationLabel = "Nothing to report";
 
     zValues.push_back(z1);
     zValues.push_back(z2);
@@ -593,19 +593,41 @@ void ofApp::generateGcodeLines(){
     gCodeExport << gCodeHeader;
     gCodeExport << sprayOn;
 
-    for (int i = 0; i < layers.back()->linesTest.size(); i++){
-        //gCodeTotalLabel += layers.back()->linesTest[i]->gCodeString(feedrate);
-        gCodeExport << layers.back()->linesTest[i]->gCodeString(feedrate, minRangeE, maxRangeE);
-        if (loadParameter){
-            if (i % loadLines == 0 && i != 0){
-                gCodeExport << gCodeLoad;
+    if (guiMode == Mode::mode_bitmap){
+        ofLog() << "estamos en modo bitmap";
+        for (int i = 0; i < layers.back()->linesTest.size(); i++){
+            //gCodeTotalLabel += layers.back()->linesTest[i]->gCodeString(feedrate);
+            gCodeExport << layers.back()->linesTest[i]->gCodeString(feedrate, minRangeE, maxRangeE);
+            if (loadParameter){
+                if (i % loadLines == 0 && i != 0){
+                    gCodeExport << gCodeLoad;
+                }
             }
-        }
-        if (unclogParameter){
-            if (i % unclogLines == 0 && i != 0){
-                gCodeExport << gCodeUnclog;
+            if (unclogParameter){
+                if (i % unclogLines == 0 && i != 0){
+                    gCodeExport << gCodeUnclog;
+                    }
+                }
             }
-        }
+    }
+    else if (guiMode == Mode::mode_gradient){
+        ofLog() << "estamos en gradient mode";
+        for (int i = 0; i < layers.back()->gradientVector.size(); i++){
+            //gCodeTotalLabel += layers.back()->linesTest[i]->gCodeString(feedrate);
+            gCodeExport << layers.back()->gradientVector[i]->gradientString;
+
+   //         gCodeExport << layers.back()->gradientVector[i]->prueba;
+            if (loadParameter){
+                if (i % loadLines == 0 && i != 0){
+                    gCodeExport << gCodeLoad;
+                }
+            }
+            if (unclogParameter){
+                if (i % unclogLines == 0 && i != 0){
+                    gCodeExport << gCodeUnclog;
+                    }
+                }
+            }
     }
     gCodeTotalLabel = gCodeExport.str();
 
@@ -645,9 +667,11 @@ void ofApp::setMode(int &index){
     switch(index){
         case 0:
             guiMode = Mode::mode_bitmap;
+            ofLog() << "setMode, mode_bitmap";
             break;
         case 1:
             guiMode = Mode::mode_gradient;
+            ofLog() << "setMode, mode_gradient";
             break;
         case 2:
             guiMode = Mode::mode_experimental;
@@ -762,7 +786,62 @@ void ofApp::saveSettings(){
 //    xml.setValue("settings:")
 //    xml.setValue("settings:")
 //    xml.setValue("settings:")
+}
 
+void ofApp::generateGradientCaller(){
 
+    Layer* newLayer = new Layer(canvasTest.width,
+                                    canvasTest.height,
+                                    threshold,
+                                    finalZ,
+                                    feedrate,
+                                    contourNumber,
+                                    radiusMultiplier,
+                                    guiMode,
+                                    horizontalPrintParameter);
+    layers.push_back(newLayer);
+
+    layers.back()->generateGradient(gradientX,
+                                    gradientY,
+                                    gradientWidth,
+                                    gradientHeight,
+                                    gradientZinitial,
+                                    gradientZfinal,
+                                    gradientEinitial,
+                                    gradientEfinal,
+                                    gradientFinitial,
+                                    gradientFfinal,
+                                    gradientResolution,
+                                    gradientDistance,
+                                    gradientSlope,
+                                    travelSpeedParameter,
+                                    horizontalPrintParameter
+                                    );
+
+    gCodeExport.clear();
+    gCodeExport.str(std::string());
+
+    gCodeExport << gCodeHeader;
+    gCodeExport << sprayOn;
+
+    for (int i = 0; i < layers.back()->gradientVector.size(); i ++){
+
+        gCodeExport << layers.back()->gradientVector[i]->gradientString;
+
+        if (loadParameter){
+            if (i % loadLines == 0 && i != 0){
+                gCodeExport << gCodeLoad;
+            }
+        }
+        if (unclogParameter){
+            if (i % unclogLines == 0 && i != 0){
+                gCodeExport << gCodeUnclog;
+            }
+        }
+    }
+
+    gCodeExport << sprayOff;
+    gCodeExport << gCodeFooter;
 
 }
+
