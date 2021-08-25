@@ -8,7 +8,7 @@
 	<sizeY>2000</sizeY>
 	<sizeZ>300</sizeZ>
 	<minExtruderRange>0</minExtruderRange>
-	<maxExtruderRange>63</maxExtruderRange>
+	<maxExtruderRange>50</maxExtruderRange>
 	<optimalPrintVelocityX>9285</optimalPrintVelocityX>
 	<optimalPrintVelocityY>10250</optimalPrintVelocityY>
 </constants>

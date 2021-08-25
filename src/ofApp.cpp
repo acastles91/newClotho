@@ -636,6 +636,8 @@ void ofApp::generateGcodeLines(){
     gCodeExport << sprayOff;
     gCodeExport << gCodeFooter;
 
+    notificationLabel = "Lines generated, now save!";
+
     //gCodeGroup->add<ofxGuiLabel>(gCodeTotalLabel);
     //gCodeTotalLabel.
 
@@ -842,6 +844,8 @@ void ofApp::generateGradientCaller(){
 
     gCodeExport << sprayOff;
     gCodeExport << gCodeFooter;
+
+    notificationLabel = "Gradient generated, now generate lines";
 
 }
 

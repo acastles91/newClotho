@@ -40,11 +40,11 @@ public:
     bool horizontal;
     bool vertical;
 
-    int numberPoints,
-        numberLines,
-        dZ,
-        dE,
-        dF;
+    float numberPoints,
+            numberLines,
+            dZ,
+            dE,
+            dF;
 
 }
 ;

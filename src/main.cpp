@@ -10,8 +10,8 @@ int main( ){
     settings.glesVersion=2;
 #else
     ofGLWindowSettings settings;
-//    settings.windowMode = ofWindowMode::OF_FULLSCREEN;
-    settings.windowMode = ofWindowMode::OF_WINDOW;
+    settings.windowMode = ofWindowMode::OF_FULLSCREEN;
+//    settings.windowMode = ofWindowMode::OF_WINDOW;
     settings.setGLVersion(3,2);
     settings.setSize(2560, 1440);
 #endif
