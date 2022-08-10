@@ -92,7 +92,8 @@ Gradient::Gradient(ofParameter<int> &xGradientArg,
             X = xGradientArg - slope;
             Y = 2000 - (yGradientArg) - (distanceArg * i); //substracting the working area
             Z = initialZarg;
-            E = initialEarg;
+            //E = initialEarg; //Ex extruder pinta cada vez que se devuelve, en el traveling move
+            E = 0;
             F = travelSpeed;
 
             ostringX << X;
@@ -165,7 +166,8 @@ Gradient::Gradient(ofParameter<int> &xGradientArg,
                                             % stringF;
 
             X = xGradientArg + widthGradientArg;
-            Y = 2000 - (yGradientArg + heightGradientArg);
+            //Y = 2000 - (yGradientArg + heightGradientArg);
+            Y = 2000 - (yGradientArg) - (distanceArg * i);
             Z = finalZarg;
             E = 0;
             F = travelSpeed;
@@ -205,7 +207,8 @@ Gradient::Gradient(ofParameter<int> &xGradientArg,
 
 
                 X = xGradientArg + widthGradientArg + slope;
-                Y = 2000 - (yGradientArg + heightGradientArg);
+                //Y = 2000 - (yGradientArg + heightGradientArg);
+                Y = 2000 - (yGradientArg) - (distanceArg * i);
                 Z = finalZarg;
                 E = 0;
                 F = travelSpeed;
