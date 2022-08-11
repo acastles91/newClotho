@@ -40,6 +40,14 @@ void ofApp::setupGui(Canvas &canvasArg){
     bitmapPanel->setPosition(projectPanel->getX() - projectPanel->getWidth() , margin);
     bitmapPanel->setHidden(false);
 
+    newBitmapPanel = gui2.addPanel();
+    newBitmapPanel->setShowHeader(true);
+    newBitmapPanel->setBackgroundColor(ofColor::teal);
+    newBitmapPanel->setWidth(ofGetWidth() / 7);
+    newBitmapPanel->setHeight(ofGetHeight() - 2 * margin);
+    newBitmapPanel->setPosition(projectPanel->getX() - projectPanel->getWidth() , margin);
+    newBitmapPanel->setHidden(false);
+
     gradientPanel = gui2.addPanel();
     gradientPanel->setShowHeader(true);
     gradientPanel->setBackgroundColor(ofColor::khaki);
@@ -105,6 +113,7 @@ void ofApp::setupGui(Canvas &canvasArg){
     modeContainer = projectGroup->addContainer();
     modeParameters.setName("Modes");
     modeParameters.add(mode1Parameter.set("Mode bitmap", false));
+    modeParameters.add(mode4Parameter.set("Mode newBitmap", false));
     modeParameters.add(mode2Parameter.set("Mode gradient", true));
     modeToggles = modeContainer->addGroup(modeParameters);
     modeToggles->setExclusiveToggles(true);
@@ -387,13 +396,10 @@ void ofApp::modeGui(){
     case Mode::mode_experimental:
 
         experimentalPanel->setHidden(true);
-        //experimentalPanel->setEnabled(true);
 
         bitmapPanel->setHidden(true);
-        //pointsPanel->setEnabled(false);
 
         linesPanel->setHidden(true);
-        //linesPanel->setEnabled(false);
         controlPanel->setHidden(true);
 
         break;
@@ -430,6 +436,25 @@ void ofApp::modeGui(){
 
 
         break;
+
+    case Mode::mode_newBitmap:
+
+       newBitmapPanel->setHidden(false);
+       newBitmapPanel->setEnabled(true);
+       //pointsPanel->setEnabled(true);
+
+       experimentalPanel->setHidden(true);
+       //experimentalPanel->setEnabled(false);
+       gradientPanel->setEnabled(false);
+
+       linesPanel->setHidden(false);
+       //linesPanel->setEnabled(false);
+
+       controlPanel->setHidden(false);
+
+
+       break;
+
 
     }
 }

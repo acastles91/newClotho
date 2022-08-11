@@ -966,6 +966,57 @@ void Layer::generateGcodePoints(ofParameter<int> workingXarg,
              }
          }
         }
+        if (mode == Mode::mode_newBitmap){
+        if (horizontal){
+            numberLines = (workingHeightArg - workingYarg - diffHeight / 2) / radius * 2;
+            for (int y = radius + diffHeight / 2; y < workingHeightArg + workingYarg- diffHeight / 2; y += radius * 2){
+                if (y >= workingYarg && y <= workingHeightArg + workingYarg){
+                    std::vector<PointGcode*> vectorX;
+                    for (int x = radius + diffWidth / 2; x < workingWidthArg + workingXarg - diffWidth / 2; x += radius * 2){
+                        if (x >= workingXarg && x <= workingWidthArg + workingXarg){
+                            int index = pixels.getPixelIndex(x, y);
+                            std::vector<ofColor> surroundingColors;
+                            ofColor color = pixels.getColor(x, y);
+                            PointGcode* newPoint = new PointGcode(index, x, y, zValue, radius, color);
+                            pointsTest.push_back(newPoint);
+                            vectorX.push_back(newPoint);
+                            //ofLog() << "New Point added";
+                            //ofLog() << newPoint->x;
+                            //ofLog() << newPoint->y;
+                            //ofLog() << newPoint->z;
+                            }
+                        }
+                    LineGcode* newLine = new LineGcode(vectorX, maxX, maxY, horizontal);
+                    linesTest.push_back(newLine);
+                   }
+             }
+         }
+        //vertical
+        else if(vertical){
+            numberLines = (workingWidthArg - workingXarg - diffWidth / 2) / radius * 2;
+            for (int x = radius + diffWidth / 2; x < workingWidthArg + workingXarg- diffWidth / 2; x += radius * 2){
+                if (x >= workingXarg && x <= workingWidthArg + workingXarg){
+                    std::vector<PointGcode*> vectorY;
+                    for (int y = radius + diffHeight / 2; y < workingHeightArg + workingYarg - diffHeight / 2; y += radius * 2){
+                        if (y >= workingYarg && y <= workingHeightArg + workingYarg){
+                            int index = pixels.getPixelIndex(x, y);
+                            std::vector<ofColor> surroundingColors;
+                            ofColor color = pixels.getColor(x, y);
+                            PointGcode* newPoint = new PointGcode(index, x, y, zValue, radius, color);
+                            pointsTest.push_back(newPoint);
+                            vectorY.push_back(newPoint);
+                            //ofLog() << "New Point added";
+                            //ofLog() << newPoint->x;
+                            //ofLog() << newPoint->y;
+                            //ofLog() << newPoint->z;
+                            }
+                        }
+                    LineGcode* newLine = new LineGcode(vectorY, maxX, maxY, horizontal);
+                    linesTest.push_back(newLine);
+                   }
+             }
+         }
+        }
         }
     }
 
@@ -1062,7 +1113,9 @@ void Layer::generateGradient(ofParameter<int> &xArg,
                          ofParameter<int> &distanceArg,
                          ofParameter<int> &slopeArg,
                          ofParameter<int> &travelSpeedArg,
-                         ofParameter<bool> &horizontalArg){
+                         ofParameter<bool> &horizontalArg,
+                         ofParameter<bool> &unclogArg,
+                         ofParameter<int> &unclogLinesArg){
 
 
 
@@ -1081,7 +1134,9 @@ void Layer::generateGradient(ofParameter<int> &xArg,
                                            distanceArg,
                                            slopeArg,
                                            travelSpeedArg,
-                                           horizontalArg);
+                                           horizontalArg,
+                                           unclogArg,
+                                           unclogLinesArg);
 
     gradientVector.push_back(newGradient);
 

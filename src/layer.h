@@ -149,7 +149,9 @@ public:
                          ofParameter<int> &distanceArg,
                          ofParameter<int> &slopeArg,
                          ofParameter<int> &travelSpeedArg,
-                         ofParameter<bool> &horizontalArg);
+                         ofParameter<bool> &horizontalArg,
+                         ofParameter<bool> &unclogArg,
+                         ofParameter<int> &unclogLinesArg);
 
 
     //Draw

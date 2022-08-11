@@ -73,6 +73,7 @@ class ofApp : public ofBaseApp{
                              *experimentalPanel,
                              *linesPanel,
                              *bitmapPanel,
+                             *newBitmapPanel,
                              *gradientPanel,
                              //*stabPanel;
                              *constantsPanel,
@@ -192,6 +193,7 @@ class ofApp : public ofBaseApp{
                                  mode1Parameter,
                                  mode2Parameter,
                                  mode3Parameter,
+                                 mode4Parameter,
                                  startStopToggle,   //check
                                  captureParameter,
                                  experimentParameter1,

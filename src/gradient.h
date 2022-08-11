@@ -24,7 +24,9 @@ public:
              ofParameter<int> &distanceArg,
              ofParameter<int> &slopeArg,
              ofParameter<int> &travelSpeedArg,
-             ofParameter<bool> &horizontalArg);
+             ofParameter<bool> &horizontalArg,
+             ofParameter<bool> &unclogArg,
+             ofParameter<int> &unclogLinesArg);
 
     std::string gCodeString(ofParameter<int> &feedrateArg, ofParameter<int> &minEarg, ofParameter<int> &maxEarg);
 

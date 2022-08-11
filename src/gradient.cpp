@@ -16,7 +16,9 @@ Gradient::Gradient(ofParameter<int> &xGradientArg,
              ofParameter<int> &distanceArg,
              ofParameter<int> &slopeArg,
              ofParameter<int> &travelSpeedArg,
-             ofParameter<bool> &horizontalArg){
+             ofParameter<bool> &horizontalArg,
+             ofParameter<bool> &unclogArg,
+             ofParameter<int> &unclogLinesArg){
 
     ofLog() << "Gradient constructor called";
 
@@ -28,6 +30,12 @@ Gradient::Gradient(ofParameter<int> &xGradientArg,
     height = heightGradientArg;
     width = widthGradientArg;
     travelSpeed = 5000;
+    //std::vector gCodeUnclog;
+
+    boost::format unclogFormat = boost::format("G0 E0\nG0 X500 Y900\nG4 P40000\n");
+    //gCodeUnclog = unclogFormat.str();
+
+
 
     int slope = slopeArg;
 
@@ -74,6 +82,13 @@ Gradient::Gradient(ofParameter<int> &xGradientArg,
         //ofLog () << ofToFloat(dZ / numberPoints);
 
         for (int i = 0; i < numberLines; i++){
+
+            if (unclogArg){
+                if (i % unclogLinesArg == 0 && i != 0){
+                    gCodePoints.push_back(unclogFormat);
+                    ofLog() << "Unclog line added";
+                    }
+                }
 
             float X,
                   Y,
@@ -170,7 +185,7 @@ Gradient::Gradient(ofParameter<int> &xGradientArg,
             Y = 2000 - (yGradientArg) - (distanceArg * i);
             Z = finalZarg;
             E = 0;
-            F = travelSpeed;
+            F = 9000;
 
             ostringX.str("");
             ostringY.str("");
@@ -211,7 +226,8 @@ Gradient::Gradient(ofParameter<int> &xGradientArg,
                 Y = 2000 - (yGradientArg) - (distanceArg * i);
                 Z = finalZarg;
                 E = 0;
-                F = travelSpeed;
+                //F = travelSpeed;
+                F = finalFarg;
 
                 ostringX.str("");
                 ostringY.str("");
@@ -248,7 +264,6 @@ Gradient::Gradient(ofParameter<int> &xGradientArg,
 
 
             gCodePoints.push_back(pointZero);
-
             gCodePoints.push_back(firstPoint);
 
             for (int e = 0; e < numberPoints; e ++){
@@ -298,11 +313,10 @@ Gradient::Gradient(ofParameter<int> &xGradientArg,
                 }
 
            //gCodePoints.push_back(closeExtruder);
-
+           //gCodePoints.push_back(closeExtruder);
            if (slope != 0){
 
            gCodePoints.push_back(lastPoint);
-
            }
 
         }
@@ -399,7 +413,16 @@ Gradient::Gradient(ofParameter<int> &xGradientArg,
             numberPoints = numberPoints * -1;
         }
 
+
+
         for (int i = 0; i < numberLines; i++){
+
+            if (unclogArg){
+                if (i % unclogLinesArg == 0 && i != 0){
+                    gCodePoints.push_back(unclogFormat);
+                    ofLog() << "Unclog line added";
+                    }
+                }
 
             float X,
                               Y,
@@ -529,6 +552,8 @@ Gradient::Gradient(ofParameter<int> &xGradientArg,
                 Y = (2000 - yGradientArg) - (resolutionArg * numberPoints) - slope; //substracting the working area
                 Z = finalZarg;
                 E = 0;
+                //F = finalFarg;
+
                 F = finalFarg;
 
                 ostringX.str("");
@@ -674,6 +699,7 @@ Gradient::Gradient(ofParameter<int> &xGradientArg,
     }
 
         for (int i = 0; i < gCodePoints.size(); i++){
+
 
             gradientString+= gCodePoints[i].str();
 

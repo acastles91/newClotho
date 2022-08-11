@@ -35,7 +35,7 @@ void ofApp::setup(){
     drawInfoParameter = false;
     drawBlurParameter = false;
     loadParameter = true;
-    unclogParameter = true;
+    //unclogParameter = true;
     guiMode = Mode::mode_bitmap;
     setupGui(canvasTest);
     modeGui();
@@ -71,67 +71,6 @@ void ofApp::draw(){
     ofFill();
     ofSetColor(ofColor::white);
     ofDrawRectangle(canvasTest.rect);
-
-
-    if (guiMode == Mode::mode_bitmap){
-
-        ofRectangle workingArea;
-        ofParameter<int> workingXdynamic;
-        ofParameter<int> workingYdynamic;
-        ofParameter<int> workingWidthDynamic;
-        ofParameter<int> workingHeightDynamic;
-
-        workingXdynamic = ofMap(workingX, 0, 2000, canvasTest.rect.getX(), canvasTest.rect.getX() + canvasTest.rect.getWidth());
-        workingYdynamic = ofMap(workingY, 0, 2000, canvasTest.rect.getY(), canvasTest.rect.getY() + canvasTest.rect.getHeight());
-        workingWidthDynamic = ofMap(workingWidth, 0, 2000, 0, canvasTest.rect.getWidth());
-        workingHeightDynamic = ofMap(workingHeight, 0, 2000, 0, canvasTest.rect.getHeight());
-
-        if (workingHeightDynamic > 2000 - workingYdynamic - 2 * margin){
-            workingHeightDynamic = 2000 - workingYdynamic - 2 * margin;
-        }
-
-        if (workingWidthDynamic > 2000 - workingXdynamic - 2 * margin){
-            workingWidthDynamic = 2000 - workingXdynamic - 2 * margin;
-        }
-        workingArea.set(workingXdynamic, workingYdynamic, workingWidthDynamic, workingHeightDynamic);
-
-        drawExperimentBuffer(canvasTest);
-        ofNoFill();
-        ofSetColor(ofColor::blue);
-        ofDrawRectangle(workingArea);
-
-    }
-
-    if (guiMode == Mode::mode_gradient){
-
-        ofRectangle gradientArea;
-        ofParameter<int> gradientXdynamic;
-        ofParameter<int> gradientYdynamic;
-        ofParameter<int> gradientWidthDynamic;
-        ofParameter<int> gradientHeightDynamic;
-
-        gradientXdynamic = ofMap(gradientX, 0, 2000, canvasTest.rect.getX(), canvasTest.rect.getX() + canvasTest.rect.getWidth());
-        gradientYdynamic = ofMap(gradientY, 0, 2000, canvasTest.rect.getY(), canvasTest.rect.getY() + canvasTest.rect.getHeight());
-        gradientWidthDynamic = ofMap(gradientWidth, 0, 2000, 0, canvasTest.rect.getWidth());
-        gradientHeightDynamic = ofMap(gradientHeight, 0, 2000, 0, canvasTest.rect.getHeight());
-
-        if (gradientHeightDynamic > 2000 - gradientYdynamic - 2 * margin){
-            gradientHeightDynamic = 2000 - gradientYdynamic - 2 * margin;
-            gradientHeightLimit = gradientHeightDynamic;
-        }
-
-        if (gradientWidthDynamic > 2000 - gradientXdynamic - 2 * margin){
-            gradientWidthDynamic = 2000 - gradientXdynamic - 2 * margin;
-            gradientWidthLimit = gradientWidthDynamic;
-        }
-        gradientArea.set(gradientXdynamic, gradientYdynamic, gradientWidthDynamic, gradientHeightDynamic);
-
-        drawExperimentBuffer(canvasTest);
-        ofNoFill();
-        ofSetColor(ofColor::red);
-        ofDrawRectangle(gradientArea);
-    }
-
 
     if (drawInfoParameter){
         drawInfo();
@@ -181,6 +120,100 @@ void ofApp::draw(){
                 layers.back()->drawGcodePoints(canvasTest.xCanvas, canvasTest.yCanvas);
             }
         }
+
+
+
+
+    if (guiMode == Mode::mode_bitmap){
+
+        ofRectangle workingArea;
+        ofParameter<int> workingXdynamic;
+        ofParameter<int> workingYdynamic;
+        ofParameter<int> workingWidthDynamic;
+        ofParameter<int> workingHeightDynamic;
+
+        workingXdynamic = ofMap(workingX, 0, 2000, canvasTest.rect.getX(), canvasTest.rect.getX() + canvasTest.rect.getWidth());
+        workingYdynamic = ofMap(workingY, 0, 2000, canvasTest.rect.getY(), canvasTest.rect.getY() + canvasTest.rect.getHeight());
+        workingWidthDynamic = ofMap(workingWidth, 0, 2000, 0, canvasTest.rect.getWidth());
+        workingHeightDynamic = ofMap(workingHeight, 0, 2000, 0, canvasTest.rect.getHeight());
+
+        if (workingHeightDynamic > 2000 - workingYdynamic - 2 * margin){
+            workingHeightDynamic = 2000 - workingYdynamic - 2 * margin;
+        }
+
+        if (workingWidthDynamic > 2000 - workingXdynamic - 2 * margin){
+            workingWidthDynamic = 2000 - workingXdynamic - 2 * margin;
+        }
+        workingArea.set(workingXdynamic, workingYdynamic, workingWidthDynamic, workingHeightDynamic);
+
+        drawExperimentBuffer(canvasTest);
+        ofNoFill();
+        ofSetColor(ofColor::blue);
+        ofDrawRectangle(workingArea);
+
+    }
+
+    if (guiMode == Mode::mode_newBitmap){
+
+        ofRectangle workingArea;
+        ofParameter<int> workingXdynamic;
+        ofParameter<int> workingYdynamic;
+        ofParameter<int> workingWidthDynamic;
+        ofParameter<int> workingHeightDynamic;
+
+        workingXdynamic = ofMap(workingX, 0, 2000, canvasTest.rect.getX(), canvasTest.rect.getX() + canvasTest.rect.getWidth());
+        workingYdynamic = ofMap(workingY, 0, 2000, canvasTest.rect.getY(), canvasTest.rect.getY() + canvasTest.rect.getHeight());
+        workingWidthDynamic = ofMap(workingWidth, 0, 2000, 0, canvasTest.rect.getWidth());
+        workingHeightDynamic = ofMap(workingHeight, 0, 2000, 0, canvasTest.rect.getHeight());
+
+        if (workingHeightDynamic > 2000 - workingYdynamic - 2 * margin){
+            workingHeightDynamic = 2000 - workingYdynamic - 2 * margin;
+        }
+
+        if (workingWidthDynamic > 2000 - workingXdynamic - 2 * margin){
+            workingWidthDynamic = 2000 - workingXdynamic - 2 * margin;
+        }
+        workingArea.set(workingXdynamic, workingYdynamic, workingWidthDynamic, workingHeightDynamic);
+
+        drawExperimentBuffer(canvasTest);
+        ofNoFill();
+        ofSetColor(ofColor::green);
+        ofDrawRectangle(workingArea);
+
+    }
+
+    if (guiMode == Mode::mode_gradient){
+
+        ofRectangle gradientArea;
+        ofParameter<int> gradientXdynamic;
+        ofParameter<int> gradientYdynamic;
+        ofParameter<int> gradientWidthDynamic;
+        ofParameter<int> gradientHeightDynamic;
+
+        gradientXdynamic = ofMap(gradientX, 0, 2000, canvasTest.rect.getX(), canvasTest.rect.getX() + canvasTest.rect.getWidth());
+        gradientYdynamic = ofMap(gradientY, 0, 2000, canvasTest.rect.getY(), canvasTest.rect.getY() + canvasTest.rect.getHeight());
+        gradientWidthDynamic = ofMap(gradientWidth, 0, 2000, 0, canvasTest.rect.getWidth());
+        gradientHeightDynamic = ofMap(gradientHeight, 0, 2000, 0, canvasTest.rect.getHeight());
+
+        if (gradientHeightDynamic > 2000 - gradientYdynamic - 2 * margin){
+            gradientHeightDynamic = 2000 - gradientYdynamic - 2 * margin;
+            gradientHeightLimit = gradientHeightDynamic;
+        }
+
+        if (gradientWidthDynamic > 2000 - gradientXdynamic - 2 * margin){
+            gradientWidthDynamic = 2000 - gradientXdynamic - 2 * margin;
+            gradientWidthLimit = gradientWidthDynamic;
+        }
+        gradientArea.set(gradientXdynamic, gradientYdynamic, gradientWidthDynamic, gradientHeightDynamic);
+
+        drawExperimentBuffer(canvasTest);
+        ofNoFill();
+        ofSetColor(ofColor::red);
+        ofDrawRectangle(gradientArea);
+    }
+
+
+
 
 //    else if(guiMode == Mode::mode_experimental){
 
@@ -604,18 +637,38 @@ void ofApp::generateGcodeLines(){
                 }
             }
             if (unclogParameter){
+
                 if (i % unclogLines == 0 && i != 0){
                     gCodeExport << gCodeUnclog;
                     }
                 }
             }
     }
+
+    if (guiMode == Mode::mode_newBitmap){
+        ofLog() << "estamos en modo newBitmap";
+        for (int i = 0; i < layers.back()->linesTest.size(); i++){
+            //gCodeTotalLabel += layers.back()->linesTest[i]->gCodeString(feedrate);
+            gCodeExport << layers.back()->linesTest[i]->gCodeString(feedrate, minRangeE, maxRangeE);
+            if (loadParameter){
+                if (i % loadLines == 0 && i != 0){
+                    gCodeExport << gCodeLoad;
+                }
+            }
+            if (unclogParameter){
+
+                if (i % unclogLines == 0 && i != 0){
+                    gCodeExport << gCodeUnclog;
+                    }
+                }
+            }
+    }
+
     else if (guiMode == Mode::mode_gradient){
         ofLog() << "estamos en gradient mode";
         for (int i = 0; i < layers.back()->gradientVector.size(); i++){
             //gCodeTotalLabel += layers.back()->linesTest[i]->gCodeString(feedrate);
-            gCodeExport << layers.back()->gradientVector[i]->gradientString;
-
+            gCodeExport << layers.back()->gradientVector[i]->gradientString;            
    //         gCodeExport << layers.back()->gradientVector[i]->prueba;
             if (loadParameter){
                 if (i % loadLines == 0 && i != 0){
@@ -623,16 +676,21 @@ void ofApp::generateGcodeLines(){
                 }
             }
             if (unclogParameter){
+                ofLog() << "gCodeExport len =";
+                //ofLog() << gCodeExport.size();
+                //ofLog() << "gradient vector size =";
+                //ofLog() << layers.back()->gradientVector.size();
+                boost::format unclogFormat = boost::format("G0 E0\nG0 X500 Y900\nG4 S20\n");
+                gCodeUnclog = unclogFormat.str();
                 if (i % unclogLines == 0 && i != 0){
                     gCodeExport << gCodeUnclog;
+                    ofLog() << "Unclog line added";
                     }
                 }
             }
     }
     gCodeTotalLabel = gCodeExport.str();
-
     intentemos = gCodeTotalLabel;
-
     gCodeExport << sprayOff;
     gCodeExport << gCodeFooter;
 
@@ -672,12 +730,18 @@ void ofApp::setMode(int &index){
             ofLog() << "setMode, mode_bitmap";
             break;
         case 1:
+            guiMode = Mode::mode_newBitmap;
+            ofLog() << "setMode, mode_newBitmap";
+            break;
+
+        case 2:
             guiMode = Mode::mode_gradient;
             ofLog() << "setMode, mode_gradient";
             break;
-        case 2:
-            guiMode = Mode::mode_experimental;
-            break;
+
+
+        //    guiMode = Mode::mode_experimental;
+        //    break;
     }
 
     modeGui();
@@ -817,7 +881,9 @@ void ofApp::generateGradientCaller(){
                                     gradientDistance,
                                     gradientSlope,
                                     travelSpeedParameter,
-                                    horizontalPrintParameter
+                                    horizontalPrintParameter,
+                                    unclogParameter,
+                                    unclogLines
                                     );
 
     gCodeExport.clear();
@@ -836,6 +902,9 @@ void ofApp::generateGradientCaller(){
             }
         }
         if (unclogParameter){
+                boost::format unclogFormat = boost::format("G0 E0\n G0 X500 Y900\n G4 S20\n");
+                gCodeUnclog = unclogFormat.str();
+
             if (i % unclogLines == 0 && i != 0){
                 gCodeExport << gCodeUnclog;
             }
