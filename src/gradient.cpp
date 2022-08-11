@@ -25,7 +25,7 @@ Gradient::Gradient(ofParameter<int> &xGradientArg,
     dZ = finalZarg - initialZarg;
     dE = finalEarg - initialEarg;
     dF = finalFarg - initialFarg;
-    prueba = "esto es una pruenba";
+    prueba = "esto es una prueba";
 
     height = heightGradientArg;
     width = widthGradientArg;

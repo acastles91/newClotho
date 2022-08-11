@@ -133,7 +133,12 @@ public:
     void generateGcodePoints(ofParameter<int> workingXarg,
                              ofParameter<int> workingYarg,
                              ofParameter<int> workingWidthArg,
-                             ofParameter<int> workingHeightArg);
+                             ofParameter<int> workingHeightArg,
+                             Mode &modeArg,
+                             ofParameter<int> newBitmapResolutionArg,
+                             ofParameter<int> newBitmapZvalueArg,
+                             ofParameter<bool> &unclogArg,
+                             ofParameter<int> &unclogLinesArg);
 
     void generateGradient(ofParameter<int> &xArg,
                          ofParameter<int> &yArg,
@@ -163,7 +168,7 @@ public:
     void drawTravel(int& xArg, int& yArg);
     void drawGcode(int& xArg, int& yArg);
     void drawSelectedBlob(int& xArg, int& yArg);
-    void drawGcodePoints(int &xArg, int &yArg);
+    void drawGcodePoints(int &xArg, int &yArg, Mode &modeArg);
 
     void drawBlur(int& xArg, int& yArg);
     void drawBuffer(Canvas &canvasArg);

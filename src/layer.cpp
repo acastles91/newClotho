@@ -1,6 +1,7 @@
 #include "layer.h"
 #include "blob.h"
 #include "ofApp.h"
+#include "mode.h"
 
 Layer::Layer(){
 
@@ -895,12 +896,24 @@ void Layer::generateGcodePoints2(){
 void Layer::generateGcodePoints(ofParameter<int> workingXarg,
                                 ofParameter<int> workingYarg,
                                 ofParameter<int> workingWidthArg,
-                                ofParameter<int> workingHeightArg){
+                                ofParameter<int> workingHeightArg,
+                                Mode &modeArg,
+                                ofParameter<int> newBitmapResolutionArg,
+                                ofParameter<int> newBitmapZvalueArg,
+                                ofParameter<bool> &unclogArg,
+                                ofParameter<int> &unclogLinesArg){
 
     //create gCodePoints corresponding to the pixels with a distance of twice the radius
     //inserting working area if clause
 
+    boost::format unclogFormat = boost::format("G0 E0\nG0 X500 Y900\nG4 P40000\n");
+
+
+    pointsTest.clear();
+
     if (loaded){
+
+        if (modeArg == Mode::mode_bitmap){
         //inserting parameters from machine test, might not work
         //int zValue;
         //zValue = (radius * 2) / 3;
@@ -915,7 +928,6 @@ void Layer::generateGcodePoints(ofParameter<int> workingXarg,
         diffHeight = int(workingHeightArg - workingYarg) % radius;
         int numberLines;
         //Horizontal
-        if (mode == Mode::mode_bitmap){
         if (horizontal){
             numberLines = (workingHeightArg - workingYarg - diffHeight / 2) / radius * 2;
             for (int y = radius + diffHeight / 2; y < workingHeightArg + workingYarg- diffHeight / 2; y += radius * 2){
@@ -966,35 +978,53 @@ void Layer::generateGcodePoints(ofParameter<int> workingXarg,
              }
          }
         }
-        if (mode == Mode::mode_newBitmap){
+        if (modeArg == Mode::mode_newBitmap){
+
+
+
+
+            ofLog() << "generating points in mode newBitmap";
+
+            int numberLines;
+            buffer.readToPixels(pixels);
+            //ofLog() << pixels.size();
+            int diffWidth;
+            diffWidth = int(workingWidthArg - workingXarg) % radius;
+            int diffHeight;
+            diffHeight = int(workingHeightArg - workingYarg) % radius;
+
         if (horizontal){
-            numberLines = (workingHeightArg - workingYarg - diffHeight / 2) / radius * 2;
-            for (int y = radius + diffHeight / 2; y < workingHeightArg + workingYarg- diffHeight / 2; y += radius * 2){
-                if (y >= workingYarg && y <= workingHeightArg + workingYarg){
-                    std::vector<PointGcode*> vectorX;
-                    for (int x = radius + diffWidth / 2; x < workingWidthArg + workingXarg - diffWidth / 2; x += radius * 2){
-                        if (x >= workingXarg && x <= workingWidthArg + workingXarg){
-                            int index = pixels.getPixelIndex(x, y);
-                            std::vector<ofColor> surroundingColors;
-                            ofColor color = pixels.getColor(x, y);
-                            PointGcode* newPoint = new PointGcode(index, x, y, zValue, radius, color);
-                            pointsTest.push_back(newPoint);
-                            vectorX.push_back(newPoint);
-                            //ofLog() << "New Point added";
-                            //ofLog() << newPoint->x;
-                            //ofLog() << newPoint->y;
-                            //ofLog() << newPoint->z;
-                            }
+            numberLines = (workingHeightArg - workingYarg ) / newBitmapResolutionArg;
+            //for (int i = 0; i < numberLines; i++){
+
+                 for (int y = workingYarg; y < workingHeightArg + workingYarg; y += newBitmapResolutionArg * 2){
+                     if (y >= workingYarg && y <= workingHeightArg + workingYarg){
+                         std::vector<PointGcode*> vectorX;
+                         for (int x = workingXarg; x < workingWidthArg + workingXarg; x += newBitmapResolutionArg * 2){
+                             if (x >= workingXarg && x <= workingWidthArg + workingXarg){
+                                 int index = pixels.getPixelIndex(x, y);
+                                 std::vector<ofColor> surroundingColors;
+                                 ofColor color = pixels.getColor(x, y);
+                                 PointGcode* newPoint = new PointGcode(index, x, y, newBitmapZvalueArg, newBitmapResolutionArg, color);
+                                 pointsTest.push_back(newPoint);
+                                 ofLog() << newPoint->color;
+                                 vectorX.push_back(newPoint);
+                                 //ofLog() << "New Point added";
+                                 //ofLog() << newPoint->x;
+                                 //ofLog() << newPoint->y;
+                                 //ofLog() << newPoint->z;
+                                 }
+                             }
+                         LineGcode* newLine = new LineGcode(vectorX, maxX, maxY, horizontal);
+                         linesTest.push_back(newLine);
                         }
-                    LineGcode* newLine = new LineGcode(vectorX, maxX, maxY, horizontal);
-                    linesTest.push_back(newLine);
-                   }
-             }
-         }
+                  }
+         //}
+        }
         //vertical
         else if(vertical){
-            numberLines = (workingWidthArg - workingXarg - diffWidth / 2) / radius * 2;
-            for (int x = radius + diffWidth / 2; x < workingWidthArg + workingXarg- diffWidth / 2; x += radius * 2){
+            numberLines = (workingHeightArg - workingYarg ) / newBitmapResolutionArg;
+                        for (int x = radius + diffWidth / 2; x < workingWidthArg + workingXarg- diffWidth / 2; x += radius * 2){
                 if (x >= workingXarg && x <= workingWidthArg + workingXarg){
                     std::vector<PointGcode*> vectorY;
                     for (int y = radius + diffHeight / 2; y < workingHeightArg + workingYarg - diffHeight / 2; y += radius * 2){
@@ -1016,9 +1046,13 @@ void Layer::generateGcodePoints(ofParameter<int> workingXarg,
                    }
              }
          }
-        }
+        ofLog() << "gCodePoints vector size = ";
+        ofLog() << pointsTest.size();
+
         }
     }
+
+}
 
 
 
@@ -1081,7 +1115,7 @@ void Layer::drawExperimentBuffer(Canvas &canvasArg){
     //ofLog() "Size: " << buffer.
 }
 
-void Layer::drawGcodePoints(int &xArg, int &yArg){
+void Layer::drawGcodePoints(int &xArg, int &yArg, Mode &modeArg){
 
     ofPushMatrix();
     ofTranslate(xArg, yArg, 0);
@@ -1091,7 +1125,12 @@ void Layer::drawGcodePoints(int &xArg, int &yArg){
     for (int i = 0; i < pointsTest.size(); i++){
         ofSetColor(pointsTest[i]->color);
         //ofLog() << pointsTest[i]->color;
+        if(modeArg == Mode::mode_bitmap){
         ofDrawCircle(pointsTest[i]->x, pointsTest[i]->y, pointsTest[i]->radius);
+    }
+        else if(modeArg == Mode::mode_newBitmap){
+        ofDrawCircle(pointsTest[i]->x, pointsTest[i]->y, pointsTest[i]->resolution);
+        }
     }
 
     buffer.end();

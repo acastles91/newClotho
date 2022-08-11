@@ -51,4 +51,18 @@
 			<Height>1101</Height>
 		</Working_Area>
 	</group>
+	<horizontal_sliders>
+		<Resolution>150</Resolution>
+		<Z_value>1</Z_value>
+		<Min__E_value>10</Min__E_value>
+		<Max__E_value>24</Max__E_value>
+		<Feedrate>11000</Feedrate>
+		<Radius_Multiplier>1</Radius_Multiplier>
+	</horizontal_sliders>
+	<Working_Area>
+		<X>600</X>
+		<Y>800</Y>
+		<Width>500</Width>
+		<Height>300</Height>
+	</Working_Area>
 </group>

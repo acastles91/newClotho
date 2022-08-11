@@ -32,6 +32,9 @@ class ofApp : public ofBaseApp{
         int activeMode;
         int activeExperiment;
 
+        boost::format unclogLine;
+
+
         vector<Layer*> layers;
         std::string filePath;
         std::string backgroundFilePath;
@@ -85,19 +88,22 @@ class ofApp : public ofBaseApp{
                              *changeSpeedSliderP;
 
         ofxGuiContainer      *layerContainer,
+                    *newLayerContainer,
                              *backgroundContainer,
                              *saveContainer,
                              *drawContainer,
                              *directionContainer,
                              *buttonsContainer,
                              *slidersContainer,
+                      *newBitmapSlidersContainer,
                              *gradientContainer,
                              *secondSlidersContainer,
                              *markersContainer,
                              *backgroundSubContainer,
                              *modeContainer,
                              *experimentContainer,
-                             *workingAreaContainer;
+                             *workingAreaContainer,
+                             *newWorkingAreaContainer;
 
          ofxGuiGroup        *controlGroup,
                             *speedGroup,
@@ -144,6 +150,7 @@ class ofApp : public ofBaseApp{
          ofxGui              gui2, gui3;     //check if gui3 is redundant
 
          ofxGuiButton        *loadLayerButton,
+                    *newLoadLayerButton,
                              *loadBackgroundButton,
                              *saveButton,
                              *detectContourSetupButton,
@@ -176,7 +183,8 @@ class ofApp : public ofBaseApp{
                                 activeModeName,
                                 activeExperimentName,
                                 experimentDescriptionString,
-                                notificationLabel;
+                                notificationLabel,
+                             suggestedZlabel;
 
 
          ofParameter<bool>       drawContourParameter,
@@ -234,13 +242,23 @@ class ofApp : public ofBaseApp{
                                 feedrate,
                                 threshold,
                                 radius,
+                                newBitmapresolution,
+                             newBitmapZvalue,
+                                newBitmapMinRangeE,
+                             newBitmapMaxRangeE,
+                             newBitmapFeedrate,
+                             newBitmapRadiusMultiplier,
                                 selectedBlob,
                                 contourNumber,
                                 workingX,
                                 workingY,
+                 workingHeight,
                                 finalZ,
                                 workingWidth,
-                                workingHeight,
+                                newWorkingX,
+                                newWorkingY,
+                                newWorkingWidth,
+                                newWorkingHeight,
                                 wNumberofPoints,
                                 z1,
                                 z2,

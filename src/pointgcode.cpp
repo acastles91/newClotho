@@ -33,6 +33,24 @@ PointGcode::PointGcode(int &pixelIndexArg,
     radius = radiusArg;
 }
 
+PointGcode::PointGcode(int &pixelIndexArg,
+                       int &xArg,
+                       int &yArg,
+                       ofParameter<int> &newZvalueArg,
+                       ofParameter<int> &newResolutionArg,
+                       ofColor &colorArg){
+
+    pixelIndex = pixelIndexArg;
+    x = xArg;
+    y = yArg;
+    z = newZvalueArg;
+    e = colorArg[0];
+    color = colorArg;
+    //radius = radiusArg;
+    resolution = newResolutionArg;
+    ofLog() << "point added";
+}
+
 PointGcode::PointGcode(int xArg,
                        int &yArg,
                        int &zArg,

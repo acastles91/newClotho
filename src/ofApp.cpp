@@ -50,6 +50,7 @@ void ofApp::setup(){
     zValues.push_back(z2);
     zValues.push_back(z3);
     zValues.push_back(z4);
+    unclogLine = boost::format("G0 E0\nG0 X500 Y900\nG4 P40000\n");
 
 }
 
@@ -117,12 +118,9 @@ void ofApp::draw(){
 //            }
 
             if (drawGcodePointsParameter){
-                layers.back()->drawGcodePoints(canvasTest.xCanvas, canvasTest.yCanvas);
+                layers.back()->drawGcodePoints(canvasTest.xCanvas, canvasTest.yCanvas, guiMode);
             }
         }
-
-
-
 
     if (guiMode == Mode::mode_bitmap){
 
@@ -161,10 +159,10 @@ void ofApp::draw(){
         ofParameter<int> workingWidthDynamic;
         ofParameter<int> workingHeightDynamic;
 
-        workingXdynamic = ofMap(workingX, 0, 2000, canvasTest.rect.getX(), canvasTest.rect.getX() + canvasTest.rect.getWidth());
-        workingYdynamic = ofMap(workingY, 0, 2000, canvasTest.rect.getY(), canvasTest.rect.getY() + canvasTest.rect.getHeight());
-        workingWidthDynamic = ofMap(workingWidth, 0, 2000, 0, canvasTest.rect.getWidth());
-        workingHeightDynamic = ofMap(workingHeight, 0, 2000, 0, canvasTest.rect.getHeight());
+        workingXdynamic = ofMap(newWorkingX, 0, 2000, canvasTest.rect.getX(), canvasTest.rect.getX() + canvasTest.rect.getWidth());
+        workingYdynamic = ofMap(newWorkingY, 0, 2000, canvasTest.rect.getY(), canvasTest.rect.getY() + canvasTest.rect.getHeight());
+        workingWidthDynamic = ofMap(newWorkingWidth, 0, 2000, 0, canvasTest.rect.getWidth());
+        workingHeightDynamic = ofMap(newWorkingHeight, 0, 2000, 0, canvasTest.rect.getHeight());
 
         if (workingHeightDynamic > 2000 - workingYdynamic - 2 * margin){
             workingHeightDynamic = 2000 - workingYdynamic - 2 * margin;
@@ -211,22 +209,7 @@ void ofApp::draw(){
         ofSetColor(ofColor::red);
         ofDrawRectangle(gradientArea);
     }
-
-
-
-
-//    else if(guiMode == Mode::mode_experimental){
-
-//        drawExperimentBuffer(canvasTest);
-
-//        }
-
-
-//
-    }
-
-    //fbo.end();
-//}
+}
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
@@ -383,10 +366,10 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 //void ofApp::loadLayer(int& xArg, int& yArg){
 void ofApp::loadLayer(){
 
-    ofFileDialogResult result = ofSystemLoadDialog("Load file");
-    if(result.bSuccess) {
-
-      Layer* newLayer = new Layer(canvasTest.width,
+    if(guiMode == Mode::mode_bitmap){
+        ofFileDialogResult result = ofSystemLoadDialog("Load file");
+        if(result.bSuccess) {
+        Layer* newLayer = new Layer(canvasTest.width,
                                   canvasTest.height,
                                   threshold,
                                   finalZ,
@@ -396,49 +379,101 @@ void ofApp::loadLayer(){
                                   guiMode,
                                   horizontalPrintParameter);
 
-
-      newLayer->filePath = result.getPath();
-
-//      newLayer->image.loadImage(ofToDataPath(newLayer->filePath));
-//      newLayer->image.resize(canvasTest.width, canvasTest.height);
-//      newLayer->buffer.allocate(2000, 2000);
-//      ofImage tempImage;
-//      tempImage = newLayer->image;
-//      tempImage.resize(2000, 2000);
-//      newLayer->buffer = tempImage.getTexture()
-//      //newLayer->texture.
-
-//      newLayer->pixels.allocate(this->buffer.getWidth(), this->buffer.getHeight(), OF_IMAGE_COLOR);
-
-//      //ofLog() << newLayer->pointsTest.size();
-
-//      newLayer->loaded = true;
-      newLayer->setupLayer();
-      layers.push_back(newLayer);
-      layerString.set("File location", newLayer->filePath);
-      isLoaded = true;
-      if (unclogParameter){
-          boost::format unclogFormat = boost::format("G0 E0\nG0 X1600 Y900 F4000\nG0 E20\nG4 S4000\nG0 E0\nG4 S2000\nG0 E20\nG4 S4000\nG0 E0\nG4 S2000\nG0 E20\nG4 S4000\nG0 E0\nG4 S2000\n");
-
-
-          gCodeUnclog = unclogFormat.str();
-
-      }
-      if (loadParameter){
-          boost::format loadFormat = boost::format("G0 X1600 Y900 F4000\nG4 S%d\n")
-                                                  %ofToString(loadTime * 1000);
-
-          gCodeLoad = loadFormat.str();
-
-      }
-      ofLog() << "Is loaded = true";
+        newLayer->filePath = result.getPath();
+        newLayer->setupLayer();
+        layers.push_back(newLayer);
+        layerString.set("File location", newLayer->filePath);
+        isLoaded = true;
+        if (unclogParameter){
+            boost::format unclogFormat = boost::format("G0 E0\nG0 X1600 Y900 F4000\nG0 E20\nG4 S4000\nG0 E0\nG4 S2000\nG0 E20\nG4 S4000\nG0 E0\nG4 S2000\nG0 E20\nG4 S4000\nG0 E0\nG4 S2000\n");
+            gCodeUnclog = unclogFormat.str();
+            }
+        if (loadParameter){
+            boost::format loadFormat = boost::format("G0 X1600 Y900 F4000\nG4 S%d\n")
+                                                      %ofToString(loadTime * 1000);
+            gCodeLoad = loadFormat.str();
+            }
+        ofLog() << "Is loaded = true";
+        }
     }
-    //ofSetColor(ofColor::white);
-    //ofDrawRectangle(canvasTest.rect);
+
+    else if(guiMode == Mode::mode_newBitmap){
+
+        ofFileDialogResult result = ofSystemLoadDialog("Load file");
+        if(result.bSuccess) {
+        Layer* newLayer = new Layer(canvasTest.width,
+                                  canvasTest.height,
+                                  threshold,
+                                  newBitmapZvalue,
+                                  newBitmapFeedrate,
+                                  contourNumber,
+                                  newBitmapRadiusMultiplier,
+                                  guiMode,
+                                  horizontalPrintParameter);
+
+        newLayer->filePath = result.getPath();
+        newLayer->setupLayer();
+        layers.push_back(newLayer);
+        layerString.set("File location", newLayer->filePath);
+        isLoaded = true;
+        if (unclogParameter){
+            boost::format unclogFormat = boost::format("G0 E0\nG0 X1600 Y900 F4000\nG0 E20\nG4 S4000\nG0 E0\nG4 S2000\nG0 E20\nG4 S4000\nG0 E0\nG4 S2000\nG0 E20\nG4 S4000\nG0 E0\nG4 S2000\n");
+            gCodeUnclog = unclogFormat.str();
+            }
+        if (loadParameter){
+            boost::format loadFormat = boost::format("G0 X1600 Y900 F4000\nG4 S%d\n")
+                                                      %ofToString(loadTime * 1000);
+            gCodeLoad = loadFormat.str();
+            }
+        ofLog() << "Is loaded = true";
+        }
+    }
 
 }
 
 void ofApp::updateLayer(){
+
+    if(guiMode == Mode::mode_bitmap){
+
+        isLoaded = false;
+        std::string filePath2;
+
+        filePath2 = layers.back()->filePath;
+        delete layers.back();
+        if (unclogParameter){
+            boost::format unclogFormat = boost::format("G0 E0\nG0 X1600 Y900 F4000\nG0 E20\nG4 S4000\nG0 E0\nG4 S2000\nG0 E20\nG4 S4000\nG0 E0\nG4 S2000\nG0 E20\nG4 S4000\nG0 E0\nG4 S2000\n");
+
+
+            gCodeUnclog = unclogFormat.str();
+
+        }
+        if (loadParameter){
+            boost::format loadFormat = boost::format("G0 X1600 Y900 F4000\nG4 P%d\nG0 E20\nG4 P10000\nG0 E0\n")
+                                                    %ofToString(loadTime * 1000);
+            gCodeLoad = loadFormat.str();
+
+        }
+       Layer* newLayer = new Layer(canvasTest.width,
+                                    canvasTest.height,
+                                    threshold,
+                                    finalZ,
+                                    feedrate,
+                                    contourNumber,
+                                    radiusMultiplier,
+                                    guiMode,
+                                    horizontalPrintParameter);
+
+        newLayer->filePath = filePath2;
+        newLayer->setupLayer();
+        layers.push_back(newLayer);
+        layerString.set("File location", newLayer->filePath);
+        isLoaded = true;
+        //ofLog() << "Is loaded = true";
+        ofLog() << "updateLayer executed";
+
+    }
+
+    else if(guiMode == Mode::mode_newBitmap){
 
     isLoaded = false;
     std::string filePath2;
@@ -455,54 +490,27 @@ void ofApp::updateLayer(){
     if (loadParameter){
         boost::format loadFormat = boost::format("G0 X1600 Y900 F4000\nG4 P%d\nG0 E20\nG4 P10000\nG0 E0\n")
                                                 %ofToString(loadTime * 1000);
-
-
-
         gCodeLoad = loadFormat.str();
 
     }
-//    Mode tempMode;
-//    if (mode1Parameter){
-//        tempMode = Mode::mode_experimental;
-//    }else if (mode2Parameter){
-//        tempMode = Mode::mode_lines;
-//    }else if (mode3Parameter){
-//        tempMode = Mode::mode_points;
-//    }
-
-    //layers.erase(layers.back());
     Layer* newLayer = new Layer(canvasTest.width,
-                                canvasTest.height,
-                                threshold,
-                                finalZ,
-                                feedrate,
-                                contourNumber,
-                                radiusMultiplier,
-                                guiMode,
-                                horizontalPrintParameter);
+                                  canvasTest.height,
+                                  threshold,
+                                  newBitmapZvalue,
+                                  newBitmapFeedrate,
+                                  contourNumber,
+                                  newBitmapRadiusMultiplier,
+                                  guiMode,
+                                  horizontalPrintParameter);
+
     newLayer->filePath = filePath2;
     newLayer->setupLayer();
-//    newLayer->image.loadImage(ofToDataPath(newLayer->filePath));
-//    newLayer->image.resize(canvasTest.width, canvasTest.height);
-//    newLayer->loaded = true;
     layers.push_back(newLayer);
     layerString.set("File location", newLayer->filePath);
     isLoaded = true;
     //ofLog() << "Is loaded = true";
     ofLog() << "updateLayer executed";
-
-//    if (layers.back()->loaded){
-
-//        //layers.back()->radius = radius;
-//        //layers.back()->threshold = threshold;
-//        //layers.back()->feedrate = feedrate;
-//        layers.back()->blurSetup();
-//        layers.back()->detectContourSetup();
-//        layers.back()->detectContourUpdate();
-//        layers.back()->buildHatch();
-//        layers.back()->buildTravel();
-//    }
-
+    }
 }
 
 //--------------------------------------------------------------
@@ -588,8 +596,17 @@ void ofApp::setRadius(){
 
 void ofApp::generateGcodePointsCaller(){
 
-    layers.back()->generateGcodePoints(workingX, workingY, workingWidth, workingHeight);
+    buffer.clear();
 
+    if (guiMode == Mode::mode_bitmap){
+
+        layers.back()->generateGcodePoints(workingX, workingY, workingWidth, workingHeight, guiMode, newBitmapresolution, newBitmapZvalue, unclogParameter, unclogLines);
+    }
+    else if(guiMode == Mode::mode_newBitmap){
+
+        layers.back()->generateGcodePoints(newWorkingX, newWorkingY, newWorkingWidth, newWorkingHeight, guiMode, newBitmapresolution, newBitmapZvalue, unclogParameter, unclogLines);
+
+    }
 }
 
 void ofApp::experiment1Caller(){
@@ -648,20 +665,20 @@ void ofApp::generateGcodeLines(){
     if (guiMode == Mode::mode_newBitmap){
         ofLog() << "estamos en modo newBitmap";
         for (int i = 0; i < layers.back()->linesTest.size(); i++){
-            //gCodeTotalLabel += layers.back()->linesTest[i]->gCodeString(feedrate);
-            gCodeExport << layers.back()->linesTest[i]->gCodeString(feedrate, minRangeE, maxRangeE);
+                        gCodeExport << layers.back()->linesTest[i]->gCodeString(newBitmapFeedrate, newBitmapMinRangeE, newBitmapMaxRangeE);
             if (loadParameter){
                 if (i % loadLines == 0 && i != 0){
                     gCodeExport << gCodeLoad;
                 }
             }
-            if (unclogParameter){
-
-                if (i % unclogLines == 0 && i != 0){
-                    gCodeExport << gCodeUnclog;
+                if (unclogParameter){
+                    if (i % unclogLines == 0 && i != 0){
+                        gCodeUnclog = unclogLine.str();
+                        gCodeExport << gCodeUnclog;
                     }
                 }
-            }
+
+    }
     }
 
     else if (guiMode == Mode::mode_gradient){

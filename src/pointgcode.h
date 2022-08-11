@@ -24,6 +24,13 @@ public:
                ofParameter<int> &radiusArg,
                ofColor &colorArg);
 
+    PointGcode(int &pixelIndexArg,
+               int &xArg,
+               int &yArg,
+               ofParameter<int> &newZvalueArg,
+               ofParameter<int> &newResolutionArg,
+               ofColor &colorArg);
+
     PointGcode(int  xArg,
                int  &yArg,
                int  &zArg,
@@ -40,7 +47,8 @@ public:
         z,
         e,
         g4,
-        radius;
+        radius,
+        resolution;
 
     bool travel;
 
