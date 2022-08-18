@@ -248,6 +248,7 @@ class ofApp : public ofBaseApp{
                              newBitmapMaxRangeE,
                              newBitmapFeedrate,
                              newBitmapRadiusMultiplier,
+                                newBitmapSlope,
                                 selectedBlob,
                                 contourNumber,
                                 workingX,

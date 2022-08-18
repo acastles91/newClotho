@@ -48,6 +48,15 @@ std::string LineGcode::gCodeString(ofParameter<int> &feedrateArg, ofParameter<in
                                       % ofToString(vectorPoints.back()->z)
                                       % ofToString(0)
                                       % ofToString(travelSpeed);
+        
+        boost::format	resetExtruder = boost::format("G0 X%d Y%d Z%d E%d F%d\n")
+                					  % ofToString(vectorPoints.back()->x + slopeArg)
+                                      % ofToString((height - vectorPoints[0]->y))
+                                      % ofToString(vectorPoints.back()->z)
+                                      % ofToString(0)
+                                      % ofToString(travelSpeed);
+        
+
 
         vector<boost::format> gCodePoints;
 

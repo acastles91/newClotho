@@ -239,12 +239,13 @@ void ofApp::setupGui(Canvas &canvasArg){
     newBitmapSlidersContainer = newBitmapPanel->addContainer("horizontal sliders", ofJson({{"direction", "vertical"}}));
     newBitmapSlidersContainer->setBackgroundColor(ofColor::pink);
     newBitmapSlidersContainer->setPosition(0, directionContainer->getHeight());
-    newBitmapSlidersContainer->add<ofxGuiIntInputField>(newBitmapresolution.set("Resolution", 15, 1, 150), ofJson({{"width", 120}, {"height", 50}}));
+    newBitmapSlidersContainer->add<ofxGuiIntInputField>(newBitmapresolution.set("Resolution", 5, 1, 150), ofJson({{"width", 120}, {"height", 50}}));
     newBitmapSlidersContainer->add<ofxGuiIntInputField>(newBitmapZvalue.set("Z value", 55, 1, 70), ofJson({{"width", 100}, {"height", 30}}));
     newBitmapSlidersContainer->add<ofxGuiIntInputField>(newBitmapMinRangeE.set("Min. E value", 10, 0, 10), ofJson({{"width", 100}, {"height", 30}}));
     newBitmapSlidersContainer->add<ofxGuiIntInputField>(newBitmapMaxRangeE.set("Max. E value", 30, 10, 55), ofJson({{"width", 100}, {"height", 30}}));
     newBitmapSlidersContainer->add<ofxGuiIntInputField>(newBitmapFeedrate.set("Feedrate", 9000, 1, 11000), ofJson({{"width", 100}, {"height", 30}}));
     newBitmapSlidersContainer->add<ofxGuiIntInputField>(newBitmapRadiusMultiplier.set("Radius Multiplier", 1, 1, 150), ofJson({{"width", 120}, {"height", 50}}));
+    newBitmapSlidersContainer->add<ofxGuiIntInputField>(newBitmapSlope.set("Slope", 50, 1, 150), ofJson({{"width", 120}, {"height", 50}}));
     newBitmapSlidersContainer->add<ofxGuiLabel>(suggestedZlabel);
 
 
