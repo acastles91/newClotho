@@ -134,8 +134,8 @@ class ofApp : public ofBaseApp{
          std::string gCodeLoad;
          std::string gCodeUnclog;
 
-         ofParameter <float> slider1Val, slider2Val, slider3Val, slider4Val;
-         ofParameter <float> circularSliderVal;
+         ofParameter <float> slider1Val, slider2Val, slider3Val, slider4Val,
+                            circularSliderVal;
 
          ofParameterGroup    controlParameters,
                              speedParameters,
@@ -234,20 +234,24 @@ class ofApp : public ofBaseApp{
                                  captureBool2,
                                  recording2,
                                  forwardBool2,
-                                 homingBool;
+                                 homingBool,
+                                 newBitmapResetExtruder;
 
-         ofParameter<float>     speed2;
+         ofParameter<float>     speed2,
+                                newBitmapMaxRangeE,
+                                newBitmapMinRangeE,
+                                newBitmapresolution;
 
          ofParameter<int>       opacity,
                                 feedrate,
                                 threshold,
                                 radius,
-                                newBitmapresolution,
-                             newBitmapZvalue,
-                                newBitmapMinRangeE,
-                             newBitmapMaxRangeE,
-                             newBitmapFeedrate,
-                             newBitmapRadiusMultiplier,
+                                //newBitmapresolution,
+                                newBitmapZvalue,
+                                //newBitmapMinRangeE,
+                                //newBitmapMaxRangeE,
+                                newBitmapFeedrate,
+                                newBitmapRadiusMultiplier,
                                 newBitmapSlope,
                                 selectedBlob,
                                 contourNumber,
@@ -272,9 +276,6 @@ class ofApp : public ofBaseApp{
                                 loadLines,
                                 loadTime,
                                 unclogLines,
-
-
-                                //GradientMode
                                 minVelocity,
                                 maxVelocity,
                                 resolution,

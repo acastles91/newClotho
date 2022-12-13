@@ -647,7 +647,7 @@ void ofApp::generateGcodeLines(){
         ofLog() << "estamos en modo bitmap";
         for (int i = 0; i < layers.back()->linesTest.size(); i++){
             //gCodeTotalLabel += layers.back()->linesTest[i]->gCodeString(feedrate);
-            gCodeExport << layers.back()->linesTest[i]->gCodeString(feedrate, minRangeE, maxRangeE, newBitmapSlope);
+            gCodeExport << layers.back()->linesTest[i]->gCodeString(feedrate, minRangeE, maxRangeE, newBitmapSlope, newBitmapResetExtruder);
             if (loadParameter){
                 if (i % loadLines == 0 && i != 0){
                     gCodeExport << gCodeLoad;
@@ -665,7 +665,7 @@ void ofApp::generateGcodeLines(){
     if (guiMode == Mode::mode_newBitmap){
         ofLog() << "estamos en modo newBitmap";
         for (int i = 0; i < layers.back()->linesTest.size(); i++){
-                        gCodeExport << layers.back()->linesTest[i]->gCodeString(newBitmapFeedrate, newBitmapMinRangeE, newBitmapMaxRangeE, newBitmapSlope);
+                        gCodeExport << layers.back()->linesTest[i]->gCodeString(newBitmapFeedrate, newBitmapMinRangeE, newBitmapMaxRangeE, newBitmapSlope, newBitmapResetExtruder);
             if (loadParameter){
                 if (i % loadLines == 0 && i != 0){
                     gCodeExport << gCodeLoad;

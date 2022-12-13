@@ -140,6 +140,16 @@ public:
                              ofParameter<bool> &unclogArg,
                              ofParameter<int> &unclogLinesArg);
 
+    void generateGcodePoints(ofParameter<int> workingXarg,
+                             ofParameter<int> workingYarg,
+                             ofParameter<int> workingWidthArg,
+                             ofParameter<int> workingHeightArg,
+                             Mode &modeArg,
+                             ofParameter<float> newBitmapResolutionArg,
+                             ofParameter<int> newBitmapZvalueArg,
+                             ofParameter<bool> &unclogArg,
+                             ofParameter<int> &unclogLinesArg);
+
     void generateGradient(ofParameter<int> &xArg,
                          ofParameter<int> &yArg,
                          ofParameter<int> &widthArg,

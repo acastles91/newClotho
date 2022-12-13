@@ -17,8 +17,8 @@ public:
 
     std::vector<PointGcode*> vectorPoints;
 
-    std::string gCodeString(ofParameter<int> &feedrateArg, ofParameter<int> &minEarg, ofParameter<int> &maxEarg, ofParameter<int> &slopeArg);
-
+    std::string gCodeString(ofParameter<int> &feedrateArg, ofParameter<int> &minEarg, ofParameter<int> &maxEarg, ofParameter<int> &slopeArg, ofParameter<bool> &resetExtruderArg);
+    std::string gCodeString(ofParameter<int> &feedrateArg, ofParameter<float> &minEarg, ofParameter<float> &maxEarg, ofParameter<int> &slopeArg, ofParameter<bool> &resetExtruderArg);
     std::string sprayOn;
     std::string sprayOff;
 

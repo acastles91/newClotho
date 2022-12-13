@@ -31,6 +31,13 @@ public:
                ofParameter<int> &newResolutionArg,
                ofColor &colorArg);
 
+    PointGcode(int &pixelIndexArg,
+               int &xArg,
+               int &yArg,
+               ofParameter<int> &newZvalueArg,
+               ofParameter<float> &newResolutionArg,
+               ofColor &colorArg);
+
     PointGcode(int  xArg,
                int  &yArg,
                int  &zArg,
