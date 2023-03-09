@@ -5,7 +5,8 @@ void ofApp::setupGui(Canvas &canvasArg){
 
     ofSetFrameRate(120);
     ofBackground(235, 235, 235);
-    margin = 50;
+
+    margin = ofGetHeight() / 20;
 
 
 
@@ -18,63 +19,65 @@ void ofApp::setupGui(Canvas &canvasArg){
 
     projectPanel = gui2.addPanel();
     projectPanel->setShowHeader(true);
-    projectPanel->setBackgroundColor(ofColor::purple);
+    projectPanel->setBackgroundColor(ofColor::darkGray);
     projectPanel->setWidth(ofGetWidth() / 7);
-    projectPanel->setHeight(ofGetHeight() - 2 * margin);
+    projectPanel->setHeight(ofGetHeight() - 4 * margin);
     projectPanel->setPosition(ofGetWidth() - margin - projectPanel->getWidth() , margin);
     projectPanel->setHidden(true);
 
     experimentalPanel = gui2.addPanel();
     experimentalPanel->setShowHeader(false);
-    experimentalPanel->setBackgroundColor(ofColor::cyan);
+    experimentalPanel->setBackgroundColor(ofColor::lightGray);
     experimentalPanel->setWidth(ofGetWidth() / 7);
-    experimentalPanel->setHeight(ofGetHeight() - 2 * margin);
+    experimentalPanel->setHeight(ofGetHeight() - 4 * margin);
     experimentalPanel->setPosition(projectPanel->getX() - projectPanel->getWidth() , margin);
     experimentalPanel->setHidden(true);
 
     bitmapPanel = gui2.addPanel();
-    bitmapPanel->setShowHeader(true);
-    bitmapPanel->setBackgroundColor(ofColor::green);
+    bitmapPanel->setShowHeader(false);
+    bitmapPanel->setBackgroundColor(ofColor::lightGray);
     bitmapPanel->setWidth(ofGetWidth() / 7);
-    bitmapPanel->setHeight(ofGetHeight() - 2 * margin);
+    bitmapPanel->setHeight(ofGetHeight() - 4 * margin);
     bitmapPanel->setPosition(projectPanel->getX() - projectPanel->getWidth() , margin);
     bitmapPanel->setHidden(false);
 
     newBitmapPanel = gui2.addPanel();
-    newBitmapPanel->setShowHeader(true);
-    newBitmapPanel->setBackgroundColor(ofColor::teal);
+    newBitmapPanel->setShowHeader(false);
+    newBitmapPanel->setBackgroundColor(ofColor::darkGray);
     newBitmapPanel->setWidth(ofGetWidth() / 7);
-    newBitmapPanel->setHeight(ofGetHeight() - 2 * margin);
+    newBitmapPanel->setHeight(ofGetHeight() - 4 * margin);
     newBitmapPanel->setPosition(projectPanel->getX() - projectPanel->getWidth() , margin);
     newBitmapPanel->setHidden(false);
 
     gradientPanel = gui2.addPanel();
-    gradientPanel->setShowHeader(true);
-    gradientPanel->setBackgroundColor(ofColor::khaki);
+    gradientPanel->setShowHeader(false);
+    gradientPanel->setBackgroundColor(ofColor::darkGray);
     gradientPanel->setWidth(ofGetWidth() / 7);
-    gradientPanel->setHeight(ofGetHeight() - 2 * margin);
-    gradientPanel->setPosition(projectPanel->getX(), margin);
+    gradientPanel->setHeight(ofGetHeight() - 4 * margin);
+    gradientPanel->setPosition(projectPanel->getX() - projectPanel->getWidth() , margin);
     gradientPanel->setHidden(false);
 
     linesPanel = gui2.addPanel();
     linesPanel->setShowHeader(false);
-    linesPanel->setBackgroundColor(ofColor::gray);
+    linesPanel->setBackgroundColor(ofColor::darkGray);
     linesPanel->setWidth(ofGetWidth() / 7);
-    linesPanel->setHeight(ofGetHeight() - 2 * margin);
+    linesPanel->setHeight(ofGetHeight() - 4 * margin);
     linesPanel->setPosition(projectPanel->getX() - projectPanel->getWidth() , margin);
     linesPanel->setHidden(true);
 
     controlPanel = gui2.addPanel();
     controlPanel->setShowName(1);
     controlPanel->setShowHeader(false);
-    controlPanel->setBackgroundColor(ofColor::salmon);
+    controlPanel->setBackgroundColor(ofColor::white);
     controlPanel->setWidth(ofGetWidth() / 7);
-    controlPanel->setHeight(ofGetHeight() - 2 * margin);
+    controlPanel->setHeight(ofGetHeight() - 4 * margin);
     controlPanel->setPosition(projectPanel->getX() - projectPanel->getWidth() * 2, margin);
     controlPanel->setHidden(false);
 
     constantsGroup = controlPanel->addGroup("Notifications");
+    constantsGroup->setBackgroundColor(ofColor::darkGray);
     constantsGroup->add<ofxGuiIntLabel>(constVelocityX);
+    //constantsGroup->setTextColor(ofColor::black);
     constantsGroup->add<ofxGuiIntLabel>(constVelocityY);
     constantsGroup->add<ofxGuiIntLabel>(constAcceleration);
     constantsGroup->add<ofxGuiIntLabel>(constMaxDistanceX);
@@ -85,7 +88,8 @@ void ofApp::setupGui(Canvas &canvasArg){
     constantsGroup->add<ofxGuiIntLabel>(constOptimalPrintVelocityX);
     constantsGroup->add<ofxGuiIntLabel>(constOptimalPrintVelocityY);
     constantsGroup->add<ofxGuiLabel>(activeModeName);
-    constantsGroup->add<ofxGuiLabel>(notificationLabel);
+
+    //constantsGroup->add<ofxGuiLabel>(notificationLabel);
 
     gradientGroup = gradientPanel->addGroup("Gradient");
 
@@ -111,27 +115,28 @@ void ofApp::setupGui(Canvas &canvasArg){
     projectGroup->setShowHeader(0);
     projectGroup->setConfig(ofJson({{"type", "fullsize"}, {"direction", "vertical"}}));
     modeContainer = projectGroup->addContainer();
+//    modeContainer->setBackgroundColor(ofColor::black);
     modeParameters.setName("Modes");
-    modeParameters.add(mode1Parameter.set("Mode bitmap", false));
-    modeParameters.add(mode4Parameter.set("Mode newBitmap", false));
-    modeParameters.add(mode2Parameter.set("Mode gradient", true));
+    //modeParameters.add(mode1Parameter.set("Mode bitmap", false));
+    modeParameters.add(mode4Parameter.set("Mode newBitmap", true));
+    modeParameters.add(mode2Parameter.set("Mode gradient", false));
     modeToggles = modeContainer->addGroup(modeParameters);
     modeToggles->setExclusiveToggles(true);
     modeToggles->setConfig(ofJson({{"type", "radio"}}));
-    modeToggles->setActiveToggle(1);
+    modeToggles->setActiveToggle(0);
     modeToggles->getActiveToggleIndex().addListener(this, &ofApp::setMode);
 
     layerContainer = bitmapPanel->addContainer();
-    layerContainer->setBackgroundColor(ofColor::pink);
-    layerContainer->setWidth(100.0f);
+    layerContainer->setBackgroundColor(ofColor::darkGray);
+    //layerContainer->setWidth(100.0f);
     layerContainer->setPosition(0,0);
-    loadLayerButton = layerContainer->add<ofxGuiButton>("Load layer", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
+    loadLayerButton = layerContainer->add<ofxGuiButton>("Load picture", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
     //loadLayerButton->addListener(this, &ofApp::loadLayer(canvasArg.xCanvas, canvasArg.yCanvas));
     loadLayerButton->addListener(this, &ofApp::loadLayer);
     layerString.set("File location", filePath);
     layerContainer->add(layerString);
     backgroundContainer = bitmapPanel->addContainer();
-    backgroundContainer->setBackgroundColor(ofColor::blue);
+    backgroundContainer->setBackgroundColor(ofColor::lightGray);
     backgroundContainer->setWidth(layerContainer->getWidth());
     backgroundContainer->setPosition(0,layerContainer->getHeight());
     backgroundIsLoaded = true;
@@ -142,10 +147,10 @@ void ofApp::setupGui(Canvas &canvasArg){
     backgroundGroup->setShowName(0);
 
     newLayerContainer = newBitmapPanel->addContainer();
-    newLayerContainer->setBackgroundColor(ofColor::purple);
+    newLayerContainer->setBackgroundColor(ofColor::lightGray);
     newLayerContainer->setWidth(100.0f);
     newLayerContainer->setPosition(0,0);
-    newLoadLayerButton = newLayerContainer->add<ofxGuiButton>("Load layer", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
+    newLoadLayerButton = newLayerContainer->add<ofxGuiButton>("Load picture", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
     //loadLayerButton->addListener(this, &ofApp::loadLayer(canvasArg.xCanvas, canvasArg.yCanvas));
     newLoadLayerButton->addListener(this, &ofApp::loadLayer);
     layerString.set("File location", filePath);
@@ -172,27 +177,30 @@ void ofApp::setupGui(Canvas &canvasArg){
     experimentGroup->add<ofxGuiLabel>(experimentDescriptionString);
 
     saveContainer = controlPanel->addContainer();
-    saveContainer->setBackgroundColor(ofColor::salmon);
+    saveContainer->setBackgroundColor(ofColor::darkGray);
+    //saveContainer->setTextColor(ofColor::black);
     saveContainer->setWidth(layerContainer->getWidth());
     saveContainer->setPosition(0,layerContainer->getHeight());
-    saveButton = saveContainer->add<ofxGuiButton>("Save", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
-    saveButton->addListener(this, &ofApp::saveFile);
+    //saveButton = saveContainer->add<ofxGuiButton>("Save", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
+    //saveButton->addListener(this, &ofApp::saveFile);
     saveContainer->add(loadParameter.set("Load while printing", false));
-    saveContainer->add(loadLines.set("Load lines", 20, 10, 100), ofJson({{"width", 100}, {"height", 30}}));
+
+    saveContainer->add(loadLines.set("Load lines", 20, 10, 100), ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
+//    saveContainer->add(loadLines.set("Load lines", 20, 10, 100), ofJson({{"width", 100}, {"height", 30}}));
     saveContainer->add(loadTime.set("Load time (seconds)", 30, 10, 300), ofJson({{"width", 100}, {"height", 30}}));
     saveContainer->add(unclogParameter.set("Unclog while printing", false));
     saveContainer->add(unclogLines.set("Unclog Interval (lines)", 10, 0, 300), ofJson({{"width", 100}, {"height", 30}}));
     saveContainer->add(newBitmapResetExtruder.set("Reset extruder while printing", true));
 
     drawContainer = controlPanel->addContainer();
-    drawContainer->setBackgroundColor(ofColor::salmon);
+    drawContainer->setBackgroundColor(ofColor::darkGray);
     drawContainer->setWidth(layerContainer->getWidth());
     drawContainer->setPosition(0, backgroundContainer->getHeight());
 //    drawParameters.add(drawContourParameter.set("Draw Contour", true));
     drawContourParameter.set("false");
 //    drawParameters.add(drawHatchParameter.set("Draw Hatch Fill", true));
     drawHatchParameter.set("false");
-    drawParameters.add(drawLayerParameter.set("Draw Layer", true));
+    drawParameters.add(drawLayerParameter.set("Show picture", true));
 //    drawParameters.add(drawTravelParameter.set("Draw Travel", true));
     drawTravelParameter.set("false");
 //    drawParameters.add(drawInfoParameter.set("Draw Info", true));
@@ -200,27 +208,29 @@ void ofApp::setupGui(Canvas &canvasArg){
     drawGcodeParameter.set("false");
 //    drawParameters.add(drawBlurParameter.set("Draw Blur", false));
     drawBlurParameter.set("false");
-    drawParameters.add(drawBufferParameter.set("Draw buffer", false));
-    drawParameters.add(drawGcodePointsParameter.set("Draw Gcode Points", false));
+    drawParameters.add(drawBufferParameter.set("Show Points", false));
+    //drawBufferParameter.set(true);
+    drawGcodePointsParameter.set(true);
+    //drawParameters.add(drawGcodePointsParameter.set("Draw Points", false));
 
     drawSubGroup = drawContainer->addGroup(drawParameters);
     //drawSubGroup->addGroup(drawParameters);
-    drawSubGroup->setBackgroundColor(ofColor::lightGray);
-    drawSubGroup->setWidth(drawContainer->getWidth());
+    drawSubGroup->setBackgroundColor(ofColor::darkGray);
+    //drawSubGroup->setWidth(drawContainer->getWidth());
     drawSubGroup->setShowHeader(0);
     drawSubGroup->setShowName(0);
     drawSubGroup->setConfig(ofJson({{"type", "checkbox"}, {"direction", "vertical"}}));
     drawSubGroup->setExclusiveToggles(0);
 
     directionContainer = controlPanel->addContainer();
-    directionContainer->setBackgroundColor(ofColor::aqua);
+    directionContainer->setBackgroundColor(ofColor::darkGray);
     directionContainer->setWidth(layerContainer->getWidth());
     directionContainer->setPosition(0, backgroundContainer->getHeight());
     directionParameters.add(horizontalPrintParameter.set("Print Horizontal", true));
     directionParameters.add(verticalPrintParameter.set("Print vertical", false));
 
     directionGroup = controlPanel->addGroup(directionParameters);
-    directionGroup->setBackgroundColor(ofColor::aqua);
+    directionGroup->setBackgroundColor(ofColor::darkGray);
     directionGroup->setWidth(directionContainer->getWidth());
     directionGroup->setShowHeader(0);
     directionGroup->setShowName(0);
@@ -228,7 +238,7 @@ void ofApp::setupGui(Canvas &canvasArg){
     directionGroup->setExclusiveToggles(true);
 
     slidersContainer = bitmapPanel->addContainer("horizontal sliders", ofJson({{"direction", "vertical"}}));
-    slidersContainer->setBackgroundColor(ofColor::khaki);
+    slidersContainer->setBackgroundColor(ofColor::darkGray);
     slidersContainer->setPosition(0, directionContainer->getHeight());
     slidersContainer->add(radius.set("Radius", 1, 150, 1), ofJson({{"width", 120}, {"height", 50}}));
     slidersContainer->add(finalZ.set("Z value", 20, 70, 1), ofJson({{"width", 100}, {"height", 30}}));
@@ -238,25 +248,25 @@ void ofApp::setupGui(Canvas &canvasArg){
     slidersContainer->add(radiusMultiplier.set("Radius Multiplier", 1, 150, 1), ofJson({{"width", 120}, {"height", 50}}));
 
     newBitmapSlidersContainer = newBitmapPanel->addContainer("horizontal sliders", ofJson({{"direction", "vertical"}}));
-    newBitmapSlidersContainer->setBackgroundColor(ofColor::pink);
+    newBitmapSlidersContainer->setBackgroundColor(ofColor::lightGray);
     newBitmapSlidersContainer->setPosition(0, directionContainer->getHeight());
-    newBitmapSlidersContainer->add<ofxGuiFloatInputField>(newBitmapresolution.set("Resolution", 5, 1, 150), ofJson({{"width", 120}, {"height", 50}}));
+    newBitmapSlidersContainer->add<ofxGuiFloatInputField>(newBitmapresolution.set("Resolution", 4, 1, 150), ofJson({{"width", 120}, {"height", 50}}));
     newBitmapSlidersContainer->add<ofxGuiIntInputField>(newBitmapZvalue.set("Z value", 55, 1, 70), ofJson({{"width", 100}, {"height", 30}}));
     newBitmapSlidersContainer->add<ofxGuiFloatInputField>(newBitmapMinRangeE.set("Min. E value", 10, 0, 10), ofJson({{"width", 100}, {"height", 30}}));
     newBitmapSlidersContainer->add<ofxGuiFloatInputField>(newBitmapMaxRangeE.set("Max. E value", 30, 10, 55), ofJson({{"width", 100}, {"height", 30}}));
-    newBitmapSlidersContainer->add<ofxGuiIntInputField>(newBitmapFeedrate.set("Feedrate", 9000, 1, 11000), ofJson({{"width", 100}, {"height", 30}}));
+    newBitmapSlidersContainer->add<ofxGuiIntInputField>(newBitmapFeedrate.set("Feedrate", 7000, 1, 11000), ofJson({{"width", 100}, {"height", 30}}));
     newBitmapSlidersContainer->add<ofxGuiIntInputField>(newBitmapRadiusMultiplier.set("Radius Multiplier", 1, 1, 150), ofJson({{"width", 120}, {"height", 50}}));
     newBitmapSlidersContainer->add<ofxGuiIntInputField>(newBitmapSlope.set("Slope", 50, 1, 150), ofJson({{"width", 120}, {"height", 50}}));
     newBitmapSlidersContainer->add<ofxGuiLabel>(suggestedZlabel);
 
 
     secondSlidersContainer = gradientPanel->addContainer("horizontal sliders", ofJson({{"direction", "vertical"}}));
-    secondSlidersContainer->setBackgroundColor(ofColor::khaki);
+    secondSlidersContainer->setBackgroundColor(ofColor::darkGray);
     secondSlidersContainer->setPosition(0, directionContainer->getHeight());
-    secondSlidersContainer->add<ofxGuiIntInputField>(gradientX.set("X", 600, 0, 2000));
-    secondSlidersContainer->add<ofxGuiIntInputField>(gradientY.set("Y", 800, 0, 2000));
-    secondSlidersContainer->add<ofxGuiIntInputField>(gradientWidth.set("Width", 500, 0, 2000));
-    secondSlidersContainer->add<ofxGuiIntInputField>(gradientHeight.set("Height", 700, 0, 2000));
+    secondSlidersContainer->add<ofxGuiIntInputField>(gradientX.set("X", 573, 0, 2000));
+    secondSlidersContainer->add<ofxGuiIntInputField>(gradientY.set("Y", 607, 0, 2000));
+    secondSlidersContainer->add<ofxGuiIntInputField>(gradientWidth.set("Width", 790, 0, 2000));
+    secondSlidersContainer->add<ofxGuiIntInputField>(gradientHeight.set("Height", 687, 0, 2000));
     secondSlidersContainer->add<ofxGuiIntInputField>(gradientZinitial.set("Initial Z position", 55, 0, 55));
     secondSlidersContainer->add<ofxGuiIntInputField>(gradientZfinal.set("Final Z position", 55, 0, 55));
     secondSlidersContainer->add<ofxGuiIntInputField>(gradientEinitial.set("Initial E position", 10, 0, 50));
@@ -288,18 +298,18 @@ void ofApp::setupGui(Canvas &canvasArg){
     workingAreaContainer = bitmapPanel->addContainer("Working Area", ofJson({{"direction", "vertical"}}));
     workingAreaContainer->setBackgroundColor(ofColor::white);
     workingAreaContainer->setPosition(0, slidersContainer->getHeight());
-    workingAreaContainer->add(workingX.set("X", 600, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
-    workingAreaContainer->add(workingY.set("Y", 800, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
-    workingAreaContainer->add(workingWidth.set("Width", 500, 0, 2000 - workingX), ofJson({{"width", 100}, {"height", 30}}));
-    workingAreaContainer->add(workingHeight.set("Height", 300, 0, 2000 - workingY), ofJson({{"width", 100}, {"height", 30}}));
+    workingAreaContainer->add(workingX.set("X", 573, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
+    workingAreaContainer->add(workingY.set("Y", 607, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
+    workingAreaContainer->add(workingWidth.set("Width", 790, 0, 2000 - workingX), ofJson({{"width", 100}, {"height", 30}}));
+    workingAreaContainer->add(workingHeight.set("Height", 687, 0, 2000 - workingY), ofJson({{"width", 100}, {"height", 30}}));
 
     newWorkingAreaContainer = newBitmapPanel->addContainer("Working Area", ofJson({{"direction", "vertical"}}));
-    newWorkingAreaContainer->setBackgroundColor(ofColor::yellow);
+    newWorkingAreaContainer->setBackgroundColor(ofColor::darkGray);
     newWorkingAreaContainer->setPosition(0, slidersContainer->getHeight());
-    newWorkingAreaContainer->add(newWorkingX.set("X", 600, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
-    newWorkingAreaContainer->add(newWorkingY.set("Y", 800, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
-    newWorkingAreaContainer->add(newWorkingWidth.set("Width", 500, 0, 2000 - newWorkingX), ofJson({{"width", 100}, {"height", 30}}));
-    newWorkingAreaContainer->add(newWorkingHeight.set("Height", 300, 0, 2000 - newWorkingY), ofJson({{"width", 100}, {"height", 30}}));
+    newWorkingAreaContainer->add(newWorkingX.set("X", 573, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
+    newWorkingAreaContainer->add(newWorkingY.set("Y", 607, 0, 2000), ofJson({{"width", 100}, {"height", 30}}));
+    newWorkingAreaContainer->add(newWorkingWidth.set("Width", 790, 0, 2000 - newWorkingX), ofJson({{"width", 100}, {"height", 30}}));
+    newWorkingAreaContainer->add(newWorkingHeight.set("Height", 687, 0, 2000 - newWorkingY), ofJson({{"width", 100}, {"height", 30}}));
 
 /* inputs as textfields, working, switching to sliders
     workingXinput = workingAreaContainer->add<ofxGuiIntInputField>(workingX.set("X", 570, 0, 2000));
@@ -326,19 +336,25 @@ void ofApp::setupGui(Canvas &canvasArg){
     buttonsContainer = controlPanel->addContainer();
     //detectContourSetupButton = buttonsContainer->add<ofxGuiButton>("Detect contour setup", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
     //detectContourSetupButton->addListener(&layerTest, &Layer::detectContourSetup());
-    saveSettingsButton = buttonsContainer->add<ofxGuiButton>("Save settings", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
-    saveSettingsButton->addListener(this, &ofApp::saveSettings);
-    updateLayerButton = buttonsContainer->add<ofxGuiButton>("Update Layer", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
+    //saveSettingsButton = buttonsContainer->add<ofxGuiButton>("Save settings", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
+    //saveSettingsButton->addListener(this, &ofApp::saveSettings);
+    updateLayerButton = buttonsContainer->add<ofxGuiButton>("Update picture", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
     updateLayerButton->addListener(this, &ofApp::updateLayer);
     //buildContourButton = buttonsContainer->add<ofxGuiButton>("Build contour", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
     //drawInfoButton = buttonsContainer->add<ofxGuiButton>("Draw info", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
     //drawInfoButton->addListener(this, &ofApp::infoCaller);
     //generateGcodeButton = buttonsContainer->add<ofxGuiButton>("Generate G-Code", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
-    generateGcodePointsButton = buttonsContainer->add<ofxGuiButton>("Generate G-Code points", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
-    generateGcodePointsButton->addListener(this, &ofApp::generateGcodePointsCaller);
-    generateGcodeLinesButton = buttonsContainer->add<ofxGuiButton>("Generate G-Code lines", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
-    generateGcodeLinesButton->addListener(this, &ofApp::generateGcodeLines);
+    //generateGcodePointsButton = buttonsContainer->add<ofxGuiButton>("Generate G-Code points", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
+    //generateGcodePointsButton->addListener(this, &ofApp::generateGcodePointsCaller);
+    //generateGcodeLinesButton = buttonsContainer->add<ofxGuiButton>("Generate G-Code lines", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
+    //generateGcodeLinesButton->addListener(this, &ofApp::generateGcodeLines);
+    generateSimplifiedButton = buttonsContainer->add<ofxGuiButton>("Generate G-Code", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
+    generateSimplifiedButton->addListener(this, &ofApp::generateSimplifiedCaller);
+
+    buttonsContainer->add<ofxGuiLabel>(notificationLabel);
     //buildHatchButton = buttonsContainer->add<ofxGuiButton>("Build Hatch Fill", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
+    saveButton = buttonsContainer->add<ofxGuiButton>("Save", ofJson({{"type", "fullsize"}, {"text-align", "center"}}));
+    saveButton->addListener(this, &ofApp::saveFile);
 
 
     //listeners

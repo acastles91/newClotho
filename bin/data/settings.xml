@@ -52,17 +52,18 @@
 		</Working_Area>
 	</group>
 	<horizontal_sliders>
-		<Resolution>150</Resolution>
-		<Z_value>1</Z_value>
+		<Resolution>4</Resolution>
+		<Z_value>55</Z_value>
 		<Min__E_value>10</Min__E_value>
-		<Max__E_value>24</Max__E_value>
-		<Feedrate>11000</Feedrate>
+		<Max__E_value>30</Max__E_value>
+		<Feedrate>7000</Feedrate>
 		<Radius_Multiplier>1</Radius_Multiplier>
+		<Slope>50</Slope>
 	</horizontal_sliders>
 	<Working_Area>
-		<X>600</X>
-		<Y>800</Y>
-		<Width>500</Width>
-		<Height>300</Height>
+		<X>573</X>
+		<Y>607</Y>
+		<Width>629</Width>
+		<Height>687</Height>
 	</Working_Area>
 </group>

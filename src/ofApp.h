@@ -158,6 +158,7 @@ class ofApp : public ofBaseApp{
                              *buildContourButton,
                              *drawInfoButton,
                              *generateGcodeButton,
+                             *generateSimplifiedButton,
                              *generateGcodePointsButton,
                              *generateGcodeLinesButton,
                              *drawGcodePointsButton,
@@ -365,6 +366,7 @@ class ofApp : public ofBaseApp{
         void setDrawTravel();
         void generateGcodePointsCaller();
         void generateGcodeLines();
+        void generateSimplifiedCaller();
         void experiment1Caller();
         void generateGradientCaller();
         // seters

@@ -36,7 +36,7 @@ void ofApp::setup(){
     drawBlurParameter = false;
     loadParameter = true;
     //unclogParameter = true;
-    guiMode = Mode::mode_bitmap;
+    guiMode = Mode::mode_newBitmap;
     setupGui(canvasTest);
     modeGui();
     gCodeExport << "";
@@ -110,6 +110,8 @@ void ofApp::draw(){
 //            }
 
             if (drawBufferParameter){
+
+                layers.back()->drawGcode(canvasTest.xCanvas, canvasTest.yCanvas);
                 layers.back()->drawBuffer(canvasTest);
             }
 
@@ -609,6 +611,8 @@ void ofApp::generateGcodePointsCaller(){
     }
 }
 
+
+
 void ofApp::experiment1Caller(){
 
     experiment1();
@@ -720,6 +724,12 @@ void ofApp::generateGcodeLines(){
 
 }
 
+void ofApp::generateSimplifiedCaller(){
+
+    generateGcodePointsCaller();
+    generateGcodeLines();
+
+}
 void ofApp::saveFile(){
 
 
@@ -743,19 +753,19 @@ void ofApp::setMode(int &index){
 
     switch(index){
         case 0:
-            guiMode = Mode::mode_bitmap;
+            guiMode = Mode::mode_newBitmap;
             ofLog() << "setMode, mode_bitmap";
             break;
         case 1:
-            guiMode = Mode::mode_newBitmap;
-            ofLog() << "setMode, mode_newBitmap";
-            break;
-
-        case 2:
             guiMode = Mode::mode_gradient;
             ofLog() << "setMode, mode_gradient";
             break;
 
+//        case 2:
+//            guiMode = Mode::mode_gradient;
+//            ofLog() << "setMode, mode_gradient";
+//            break;
+//
 
         //    guiMode = Mode::mode_experimental;
         //    break;
